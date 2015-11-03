@@ -1,0 +1,445 @@
+
+<!doctype html>
+<html lang="en">
+
+
+
+
+
+
+
+
+
+
+
+<head>
+<meta charset="utf-8">
+<title>PeakCentre - Add Test Result</title>
+<link rel="shortcut icon" href="../image/favicon.png">
+<!---CSS Files-->
+<link rel="stylesheet" href="../css/master.css">
+<link rel="stylesheet" href="../css/tables.css">
+<!---jQuery Files-->
+<script src="../js/jquery-1.7.1.min.js"></script>
+<script src="../js/jquery-ui-1.8.17.min.js"></script>
+<script src="../js/jquery.dataTables.min.js"></script>
+<script src="../js/jquery.jeditable.js"></script>
+<script src="../js/jquery.dataTables.editable.js"></script>
+<script src="../js/styler.js"></script>
+<script src="../js/jquery.tipTip.js"></script>
+<script src="../js/colorpicker.js"></script>
+<script src="../js/sticky.full.js"></script>
+<script src="../js/global.js"></script>
+<script src="../js/fullcalendar/fullcalendar.min.js"></script>
+
+<!---Fonts-->
+<link
+	href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700'
+	rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu:500'
+	rel='stylesheet' type='text/css'>
+
+
+</head>
+
+<body>
+
+	<!--- HEADER -->
+
+	<div class="header">
+		<!-- <a href="dashboard.jsp"> -->
+		<img src="../image/logo.png" alt="Logo" height="50" /></a>
+	</div>
+
+	<div class="top-bar">
+		<ul id="nav">
+			<li id="user-panel"><img
+				src="http://localhost:8080/pic/1.jpg"
+				id="usr-avatar" alt="" />
+				<div id="usr-info">
+					<p id="usr-name">
+						Welcome back,
+						my.
+					</p>
+					<form method="post" action="LogoutServlet">
+						<p>
+							<a href="#" onclick="$(this).closest('form').submit()">Logout</a>
+						</p>
+					</form>
+				</div></li>
+			<li>
+				<ul id="top-nav">
+					<li class="nav-item"><a href="dashboard.jsp"><img
+							src="../image/nav/dash.png" alt="" />
+							<p>Main Page</p></a></li>
+
+					<li class="nav-item"><a><img
+							src="../image/nav/anlt-active.png" alt="" />
+							<p>Test Result</p></a>
+						<ul class="sub-nav">
+							
+							<li><a href="addTestResult.jsp">Add</a></li>
+							<li><a href="modifyTestResult.jsp">Modify</a></li>
+							<li><a href="viewTestResult.jsp">View</a></li>
+							
+						</ul></li>
+					<li class="nav-item"><a><img src="../image/nav/cal.png"
+							alt="" />
+							<p>Training Plan</p></a>
+						<ul class="sub-nav">
+							
+							<li><a href="addTrainingPlan.jsp">Add</a></li>
+							<li><a href="modifyTrainingPlan.jsp">Modify</a></li>
+							<li><a href="viewTrainingPlan.jsp">View</a></li>
+							
+						</ul></li>
+					<li class="nav-item"><a><img src="../image/nav/tb.png"
+							alt="" />
+							<p>Workout</p></a>
+						<ul class="sub-nav">
+							
+							<li><a href="viewWorkout.jsp">View</a></li>
+							
+						</ul></li>
+					<li class="nav-item"><a><img src="../image/nav/dash.png"
+							alt="" />
+							<p>User Account</p></a>
+						<ul class="sub-nav">
+							
+							<li><a href="createUser.jsp">Create</a></li>
+							<li><a href="modifyUser.jsp">Modify</a></li>
+							<li><a href="deleteUser.jsp">Delete</a></li>
+							
+						</ul></li>
+					
+					<li class="nav-item"><a><img src="../image/nav/icn.png"
+							alt="" />
+							<p>TR Template</p></a>
+						<ul class="sub-nav">
+							<li><a href="createTestResultTemp.jsp">Create</a></li>
+							<li><a href="deleteTestResultTemp.jsp">Delete</a></li>
+						</ul></li>
+					
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<!--- CONTENT AREA -->
+
+	<div class="content container_12">
+		<div class="ad-notif-success grid_12 small-mg">
+			<p>Add Test Result</p>
+		</div>
+		<div class="box grid_4">
+			<div class="box-head">
+				<h2>User Profile Search</h2>
+			</div>
+			<form method="post" id="userSearch_Form" action="">
+				<input type="hidden" value="addTestResult" name="page" />
+				<div class="box-content">
+					<div class="form-row">
+						<p>Please specify the first name and last name associated with the test result you would like to add.</p>
+					</div>
+					<br> <br>
+					<div class="form-row">
+						<label class="form-label">First Name</label>
+						<div class="form-item">
+							<input type="text" name="fname" required />
+						</div>
+					</div>
+					<div class="form-row">
+						<label class="form-label">Last Name</label>
+						<div class="form-item">
+							<input type="text" name="lname" required />
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-item" id="errmessage">
+							
+						</div>
+					</div>
+					<div class="form-row" style="text-align: right;">
+						<!-- <input type="button" id="open-dialog" class="button green"
+							value="delete"> -->
+						<input type="button" id="userProfileSearch" class="button green" value="search">
+					</div>
+				</div>
+			</form>
+		</div>
+		
+			<div class="box grid_4" id="confirmUser" title="User Selection"
+				style="display: none">
+				
+
+				<div class="box-head">
+					<h2>User Profile</h2>
+				</div>
+				<form id="addTestResult_form" method="post" action="">
+					<div class="box-content">
+						<div class="form-row">
+							<p>Please choose the user you want to add test result.</p>
+						</div>
+						<br>
+						<div class="form-row">
+							<div class="form-item" id="usernameForm">
+								<select name="userlist">
+									
+								</select>
+								
+							</div>
+						</div>
+						<div class="form-row">
+							<p>Please choose the Template and Date.</p>
+						</div>
+						<br>
+						<div class="form-row">
+							<label class="form-label">Template</label>
+							<div class="form-item">
+								<select name="templateName">
+									
+									<option value=test>test</option>
+									
+									<option value=Running>Running</option>
+									
+									<option value=111>111</option>
+									
+								</select>
+							</div>
+						</div>
+						<div class="form-row">
+							<label class="form-label">Date</label>
+							<div class="form-item">
+								<input type="text" id="datepicker" name="date" required />
+							</div>
+						</div>
+						<div class="form-row" style="text-align: right;">
+							<input type="button" id="getTestResultTemplate" class="button green" value="start">
+						</div>
+					</div>
+
+				</form>
+
+			</div>
+			<div class="box grid_12">
+				<div class="box-head">
+					<h2>Test Result</h2>
+				</div>
+				<form method="post" action="SaveTestResultServlet">
+					
+						<div class="box-content" id="field" style="display: block">
+							
+							<div id="divtext1">
+								<input type='hidden' name='username' value='222@a.com'>
+								<input type='hidden' name='tempId' value='1'>
+								<input type='hidden' name='templateName' value='test'>
+								<input type='hidden' name='date' value='10/28/2015'>
+								
+								<ul class="table-toolbar">
+								<li><p><a>   </a>s<a>   </a></p></li>
+								<li id="addARow"><a><img src="../image/icons/basic/plus.png" />Add Row</a></li>
+								</ul>
+								<table class='display' id='myDataTable1'>
+								<thead>
+								<tr>
+								<th></th><th>a</th><th>b</th>
+								</tr>
+								</thead>
+								<tbody><tr>
+								<td width="5%"><button class="removebutton"><img src="../image/icons/basic/delete.png" /></button></td>
+								<td>
+								<input required size='8' type='text' id='a_0' name='table1row0column0'></td>
+								<td><input required size='8' type='text' id='b_0' name='table1row0column1'></td></tr>
+								<tr>
+								<td><button type="button" class="removebutton" title="Remove this row">X</button></td>
+								<td><input required size='8' type='text' id='a_1' name='table1row1column0'></td>
+								<td><input required size='8' type='text' id='b_1' name='table1row1column1'></td></tr></tbody></table>
+								<input type='hidden' name='table1Row' value='2'><input type='hidden' name='table1Column' value='2'>
+								<br><br>
+								<p>Test</p>
+								<br>
+								<div id='flot-lines1'></div>
+								<input type='hidden' id='col1_1' value='a'>
+								<input type='hidden' id='col2_1' value='a'>
+								<input type='button' id='generateButton1' class='small button green' value='generate graph' onclick='generateGraph(1)'/>
+								<br><br>
+								<input type='hidden' name='totalTable' value='1'>
+							</div>
+								<div class="form-row" id="field2" style="display: block; text-align: right;">
+									
+									<input type="submit" class="button green" value="save">
+								</div>
+							</div>
+				</form>
+
+			</div>
+		</div>
+		<div class="footer">
+			<p>© Peak Centre. All rights reserved.</p>
+		</div>
+
+		<script type="text/javascript"
+			src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1',
+              'packages':['corechart']
+            }]
+          }"></script>
+		<script type="text/javascript"
+			src="http://canvg.googlecode.com/svn/trunk/rgbcolor.js"></script>
+		<script type="text/javascript"
+			src="http://canvg.googlecode.com/svn/trunk/canvg.js"></script>
+		<script>
+		//--------test add and remove row-----------------//
+		 $("#addARow").click(function () {
+			 var i = 0;
+		     $("table tbody tr:first").clone().find("input").each(function () {
+		         $(this).val('').attr({
+		             'id': function (_, id) {
+		                 return id + i
+		             },
+		                 'name': function (_, name) {
+		                 return name + i
+		             },
+		                 'value': ''
+		         });
+		     }).end().appendTo("table");
+		     i++;
+		 });
+		 $(document).on('click', 'button.removebutton', function () {
+		     $(this).closest('tr').remove();
+		     return false;
+		 });
+		//--------test add and remove row-----------------//
+		$('#userProfileSearch').click(function(){
+			$("#errmessage").html("");
+			var post = {
+				fname : $("#userSearch_Form").find("input[name=fname]").val(),
+				lname : $("#userSearch_Form").find("input[name=lname]").val(),
+				page: $("#userSearch_Form").find('input[name=page]').val()
+			};
+			$.post('AjaxSearchUser',post, function(data){
+				var message = data[0];
+				var list = data[1];
+				if(message == "") {
+					var innerHtml = "";
+					for(var i in list) {
+						innerHtml = innerHtml + "<option value=" + i + ">" + 
+						list[i].fname + " " +list[i].lname + " " + list[i].username + " " + list[i].city + "</option>";
+					}
+					var hiddenpart = "<input name='fname' type='hidden' value='" + list[0].fname + "' >" +
+					"<input name='lname' type='hidden' value='" + list[0].lname + "' >";
+					console.log("InnerHTML : " + innerHtml);
+					$("select[name=userlist]").html(innerHtml);
+					$("#usernameForm").append(hiddenpart);
+					document.getElementById("confirmUser").style.display="block";
+				} else {
+					$("#errmessage").html("<p style='color: #ff6666; font-size: 11px'>"+message+"</p>");
+					$("#userSearch_Form").find("input[name=fname]").val("");
+					$("#userSearch_Form").find("input[name=lname]").val("");
+					$("#confirmUser").css({display:'none'});
+					$("#field").css({display:'none'});
+					$("#field2").css({display:'none'});
+					$("#addTestResult_form").find("input[name=date]").val("");
+					$("#divtext1").html("");
+				}
+			});
+		});
+		//
+		$('#getTestResultTemplate').click(function(){
+			var post = {
+					userlist: $("select[name=userlist]").val(),
+					templateName: $("select[name=templateName]").val(),
+					fname: $("#addTestResult_form").find("input[name=fname]").val(),
+					lname: $("#addTestResult_form").find("input[name=lname]").val(),
+					date: $("#addTestResult_form").find("input[name=date]").val()
+			}
+			console.log(post.date);
+			$.post('AjaxGetTestResultTemplate',post,function(data){
+				console.log("Get : " + data);
+				$("#divtext1").html(data);
+				$("#field").css({display:'block'});
+				$("#field2").css({display:'block'});
+			});
+		});
+		
+		/*------------------------------------------------------------------------------*/
+		/*-----------------------------------------------------------------------------*/
+		/*----------------------------------------------------------------------------*/
+		/*---------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------*/
+		/*-------------------------------------------------------------------------*/
+			//generate graph base on data user entered
+			function generateGraph(tableNumber) {
+				document.getElementById("generateButton" + tableNumber).value = "refresh graph";
+				var col1Title = document.getElementById("col1_" + tableNumber).value;
+				var col2Title = document.getElementById("col2_" + tableNumber).value;
+
+				var data1 = [];
+				var data2 = [];
+
+
+				for (var i = 0; i < 20; i++) {
+					if (document.getElementById(col1Title + "_" + i)) {
+						data1
+								.push(document.getElementById(col1Title + "_"
+										+ i).value);
+
+					}
+					if (document.getElementById(col2Title + "_" + i)) {
+						data2
+								.push(document.getElementById(col2Title + "_"
+										+ i).value);
+					}
+
+				}
+
+				google.setOnLoadCallback(drawChart());
+
+				function drawChart() {
+					var data = new google.visualization.DataTable();
+					data.addColumn('number');
+					data.addColumn('number');
+
+					for (var i = 0; i < data1.length; i++) {
+						data.addRow([ parseInt(data1[i]), parseInt(data2[i]) ]);
+
+					}
+					var options = {
+						legend : {
+							position : 'none'
+						},
+						series : {
+							0 : {
+								color : '#a1b900',
+								lineWidth : 10
+							},
+						},
+						width : 500,
+						height : 300,
+						hAxis : {
+							title : col1Title
+						},
+						vAxis : {
+							title : col2Title
+						},
+					};
+
+					var chart = new google.visualization.LineChart(document
+							.getElementById('flot-lines' + tableNumber));
+					chart.draw(data, options);
+				}
+			}
+
+			$("#datepicker").datepicker({
+				showMonthAfterYear : true,
+				changeYear : true,
+				changeMonth : true,
+				numberOfMonths : 1,
+				yearRange : "2014:2015"
+
+			});
+		</script>
+</body>
+</html>
