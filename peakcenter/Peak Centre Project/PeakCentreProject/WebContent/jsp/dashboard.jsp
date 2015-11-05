@@ -140,6 +140,7 @@
 							%>
 							<li><a href="createUser.jsp">Create</a></li>
 							<li><a href="modifyUser.jsp">Modify</a></li>
+							<li><a href="manageAthlete.jsp">Manage</a></li>
 							<%
 								} else if ("athlete".equals(usertype)) {
 							%>
@@ -328,6 +329,11 @@
 									<font color="#a1b900">Modify User</font>
 								</p></u></a></li>
 					<p>Modify an existing user account.</p>
+					<br>
+					<li><a href="manageAthlete.jsp"><u><p>
+									<font color="#a1b900">Manage Athletes</font>
+								</p></u></a></li>
+					<p>Manage my athletes.</p>
 					<%
 						} else if ("athlete".equals(usertype)) {
 					%>

@@ -15,10 +15,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.servlet.ServletRequestContext;
 
 import com.peakcentre.web.dao.UserinfoDao;
 import com.peakcentre.web.entity.Userinfo;
@@ -36,32 +37,34 @@ public class ModifyUserServlet extends HttpServlet {
 	public ModifyUserServlet() {
 		super();
 	}
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		if(request.getSession(false) != null && request.getSession(false).getAttribute("id") != null) {
+		if (request.getSession(false) != null && request.getSession(false).getAttribute("id") != null) {
 			response.sendRedirect("dashboard.jsp");
 		} else {
 			response.sendRedirect(request.getContextPath() + "/index.jsp");
 		}
 	}
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		RequestDispatcher rd = null;
 		UserinfoDao uidao = new UserinfoDao();
 		Userinfo ui = new Userinfo();
-		Locale locale = (Locale) request.getSession(true)
-				.getAttribute("locale");
+		Locale locale = (Locale) request.getSession(true).getAttribute("locale");
 		ResourceBundle resb = ResourceBundle.getBundle("peakcentre", locale);
 
 		String usrname_message;
 		String password_message;
 		String empty_message;
 
-		int id = 0;
+		String userId = null;
 		String usertype = null;
 		String username = null;
 		String password = null;
@@ -78,7 +81,7 @@ public class ModifyUserServlet extends HttpServlet {
 		List items = null;
 		try {
 			items = upload.parseRequest(new ServletRequestContext(request));
-		} catch (org.apache.tomcat.util.http.fileupload.FileUploadException e) {
+		} catch (FileUploadException e) {
 			e.printStackTrace();
 		}
 		Iterator iter = items.iterator();
@@ -92,7 +95,7 @@ public class ModifyUserServlet extends HttpServlet {
 				// get field value
 				String value = item.getString();
 				if (item.getFieldName().equals("id")) {
-					id = Integer.parseInt(value);
+					userId = value;
 				}
 				if (item.getFieldName().equals("usertype")) {
 					usertype = value;
@@ -128,9 +131,8 @@ public class ModifyUserServlet extends HttpServlet {
 		}
 
 		// Validate empty field
-		if (username.isEmpty() || password.isEmpty() || repassword.isEmpty()
-				|| fname.isEmpty() || lname.isEmpty() || dob.isEmpty()
-				|| city.isEmpty()) {
+		if (username.isEmpty() || password.isEmpty() || repassword.isEmpty() || fname.isEmpty() || lname.isEmpty()
+				|| dob.isEmpty() || city.isEmpty()) {
 			empty_message = resb.getString("EMPTY_MESSAGE_CREATE_USER");
 			request.setAttribute("empty_message", empty_message);
 			rd = request.getRequestDispatcher("modifyUser.jsp");
@@ -143,8 +145,8 @@ public class ModifyUserServlet extends HttpServlet {
 				rd = request.getRequestDispatcher("modifyUser.jsp");
 				rd.forward(request, response);
 			} else {
+				System.out.println("userId" + userId);
 				// Update db
-				ui.setId(id);
 				ui.setUsertype(usertype);
 				ui.setUsername(username);
 				ui.setPassword(password);
@@ -154,28 +156,26 @@ public class ModifyUserServlet extends HttpServlet {
 				ui.setLevel(level);
 				ui.setDob(dob);
 				ui.setCity(city);
-				boolean f = uidao.updateUserinfo(ui);
+				boolean f = uidao.updateUserinfo(ui, userId);
 				System.out.println("Modify:" + f);
-				//update profile picture
+				// update profile picture
 				if (f) {
-					String toPicDirectory = "/Users/sunmingyang/Documents/pic/";
-					String toFileName = String.valueOf(id) + ".jpg";
+					String toPicDirectory = "pic/";
+					String toFileName = String.valueOf(uidao.getUserId(ui)) + ".jpg";
 
 					DiskFileItemFactory factory1 = new DiskFileItemFactory();
 					ServletFileUpload upload1 = new ServletFileUpload(factory1);
 					List items1 = null;
 					try {
-						items1 = upload.parseRequest(new ServletRequestContext(
-								request));
-					} catch (org.apache.tomcat.util.http.fileupload.FileUploadException e) {
+						items1 = upload.parseRequest(new ServletRequestContext(request));
+					} catch (FileUploadException e) {
 						e.printStackTrace();
 					}
 					Iterator iter1 = items.iterator();
 					while (iter1.hasNext()) {
 						FileItem item = (FileItem) iter1.next();
 						if (!item.isFormField()) {
-							File saveFile = new File(toPicDirectory
-									+ toFileName);
+							File saveFile = new File(toPicDirectory + toFileName);
 							try {
 								item.write(saveFile);
 							} catch (Exception e) {

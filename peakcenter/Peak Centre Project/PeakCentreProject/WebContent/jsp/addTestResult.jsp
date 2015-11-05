@@ -153,6 +153,7 @@
 							%>
 							<li><a href="createUser.jsp">Create</a></li>
 							<li><a href="modifyUser.jsp">Modify</a></li>
+							<li><a href="manageAthlete.jsp">Manage</a></li>
 							<%
 								} else if ("athlete".equals(usertype)) {
 							%>

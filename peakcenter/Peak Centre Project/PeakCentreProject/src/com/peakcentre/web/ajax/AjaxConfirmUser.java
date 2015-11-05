@@ -57,6 +57,7 @@ public class AjaxConfirmUser extends HttpServlet {
 		// the user information list and the real user account they want to update.
 		String fname = request.getParameter("fname");
 		String lname = request.getParameter("lname");
+		
 		int i = Integer.parseInt(request.getParameter("userlist"));
 
 		list = uidao.getUserinfo(fname, lname);

@@ -15,15 +15,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.servlet.ServletRequestContext;
 
 import com.peakcentre.web.dao.UserinfoDao;
 import com.peakcentre.web.entity.Userinfo;
+
+import javafx.application.Application;
 
 /**
  * Servlet implementation class CreateUserServlet
@@ -79,7 +80,7 @@ public class CreateUserServlet extends HttpServlet {
 		List items = null;
 		try {
 			items = upload.parseRequest(new ServletRequestContext(request));
-		} catch (org.apache.tomcat.util.http.fileupload.FileUploadException e) {
+		} catch (FileUploadException e) {
 			e.printStackTrace();
 		}
 		Iterator iter = items.iterator();
@@ -158,18 +159,19 @@ public class CreateUserServlet extends HttpServlet {
 					ui.setPassword(password);
 					ui.setFname(fname);
 					ui.setLname(lname);
-					String nextId = ((username+password).hashCode() +"").substring(0,5);
-					ui.setPicpath(nextId + ".jpg");
 					ui.setGender(gender);
 					ui.setLevel(level);
 					ui.setDob(dob);
 					ui.setCity(city);
 
 					boolean f = uidao.insertUser(ui);
+
 					if (f) {
+						String idString = uidao.getUserId(ui);
+						ui.setPicpath(idString + ".jpg");
 						//Save profile picture to local disk
-						String toPicDirectory = "/Users/sunmingyang/Documents/pic/";
-						String toFileName = nextId + ".jpg";
+						String toPicDirectory = "pic/";
+						String toFileName = idString + ".jpg";
 
 						DiskFileItemFactory factory1 = new DiskFileItemFactory();
 						ServletFileUpload upload1 = new ServletFileUpload(
@@ -179,7 +181,7 @@ public class CreateUserServlet extends HttpServlet {
 							items1 = upload
 									.parseRequest(new ServletRequestContext(
 											request));
-						} catch (org.apache.tomcat.util.http.fileupload.FileUploadException e) {
+						} catch (FileUploadException e) {
 							e.printStackTrace();
 						}
 						Iterator iter1 = items.iterator();

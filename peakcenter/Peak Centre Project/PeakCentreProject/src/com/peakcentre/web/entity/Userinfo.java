@@ -1,7 +1,7 @@
 package com.peakcentre.web.entity;
 import java.util.*;
 public class Userinfo {
-	private int id;
+	private String id;
 	private String usertype;
 	private String city;
 	private String username;
@@ -41,11 +41,11 @@ public class Userinfo {
 		return arrayList;
 
 		}
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -110,9 +110,6 @@ public class AjaxSearchUser extends HttpServlet {
 				//result might be one or more
 				message = "";
 				list = uidao.getUserinfo(fname, lname);
-				for(Userinfo t : list) {
-					t.setId(0);
-				}
 				String messageJson = new Gson().toJson(message); 
 				String listJson = new Gson().toJson(list); 
 				response.setContentType("application/json"); 
