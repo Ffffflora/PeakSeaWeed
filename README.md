@@ -10,4 +10,4 @@ step3: "git add .": stage your change
 step4: "git commit": commit your change
 step5: "git push": push local change to remote.
 
-* when you do push, please append your change date, reason you make the change, as well as the files you changed.
+* when you do push, please append your change date, reason you make the change, as well as the files you changed. Thank you!
