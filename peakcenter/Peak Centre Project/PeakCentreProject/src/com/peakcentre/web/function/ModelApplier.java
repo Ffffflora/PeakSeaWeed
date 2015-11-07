@@ -26,4 +26,6 @@ public class ModelApplier {
 		WebTarget target = client.target(getBaseUri());
 		return target.path("users").path("role=" + ui.getUsertype()).path("email="+ui.getUsername()).path("password="+ui.getPassword()).request().accept(MediaType.TEXT_HTML).get(String.class);
 	}
+	
+	
 }

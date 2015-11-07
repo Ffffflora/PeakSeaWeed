@@ -264,10 +264,6 @@
 										}}
 									%>
 								</select>
-								<table name="usertable">
-								
-								
-								</table>
 								<%
 									if (request.getAttribute("list") != null) {
 										int i=0;
