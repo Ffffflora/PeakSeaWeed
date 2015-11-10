@@ -10,6 +10,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.UpdateResult;
 import com.peakcentre.web.mongo.*;
 
+import Util.peakcentreUtil;
 import sun.swing.UIAction;
 
 //Used for User Account related database manipulation
@@ -188,8 +189,18 @@ public class UserinfoDao {
 
 	}
 
-	// Check if username already exists
+	//Check if user exists by user id
+	
+	public boolean checkUserExistsWithUserId(final String userId) {
+		userCollection = connec.getRequiredCollection("Userinfo");
+		FindIterable<Document> userList = userCollection.find(new Document("id", userId));
+		boolean a = (userList.first() != null);
 
+		connec.closeConnection();
+		return a;
+	}	
+	
+	
 	public boolean checkUserExistsWithUsertype(String fname, String lname, String city) {
 
 		userCollection = connec.getRequiredCollection("Userinfo");
@@ -225,6 +236,16 @@ public class UserinfoDao {
 
 	}
 
+	// Get userinfo according to userId
+	
+	public Userinfo getUserinfoById(final String userid){
+		Userinfo ui = new Userinfo();
+		userCollection = connec.getRequiredCollection("Userinfo");
+		Document doc = new Document("id", userid);
+		Document user = userCollection.find(doc).first();
+		return peakcentreUtil.setValuesForUserByDoc(user);
+	}
+	
 	// get user infomation accordind to fname and lname
 
 	public ArrayList<Userinfo> getUserinfo(String fname, String lname) {
@@ -240,42 +261,8 @@ public class UserinfoDao {
 		if (userList != null) {
 
 			for (Document user : userList) {
-				String itemUserId = user.get("id").toString();
-				String itemUsertype = user.get("usertype").toString();
-				String itemCity = user.get("city").toString();
-				String itemUsername = user.get("username").toString();
-				String itemPassword = user.get("password").toString();
-				String itemFname = user.get("fname").toString();
-				String itemLname = user.get("lname").toString();
-				String itemLevel = user.get("level").toString();
-				String itemGender = user.get("gender").toString();
-				String itemDob = user.get("dob").toString();
-				String itemPicpath = "";
-				if (user.get("picpath") == null || user.get("picpath").equals("")) {
-					itemPicpath = "1";
-				} else {
-					itemPicpath = user.get("picpath").toString();
-				}
-				Userinfo temp = new Userinfo();
-				temp.setId(itemUserId);
-				temp.setCity(itemCity);
-				temp.setFname(itemFname);
-				temp.setGender(itemGender);
-				temp.setPassword(itemPassword);
-				temp.setLevel(itemLevel);
-				temp.setLname(itemLname);
-				temp.setDob(itemDob);
-				temp.setPicpath(itemPicpath);
-				temp.setUsertype(itemUsertype);
-				temp.setUsername(itemUsername);
-
-				list.add(temp);
-				// list.add(new Userinfo(itemId, itemUsertype, itemCity,
-				// itemUsername,
-
-				// itemPassword, itemFname, itemLname, itemLevel, itemGender,
-				// itemDob, itemPicpath));
-
+				//create userinfo with values in user(Document).
+				list.add(peakcentreUtil.setValuesForUserByDoc(user));
 			}
 
 		}
@@ -340,7 +327,6 @@ public class UserinfoDao {
 		return flag;
 
 	}
-
 }
 
 /*
