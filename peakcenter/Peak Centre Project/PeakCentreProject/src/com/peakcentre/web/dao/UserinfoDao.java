@@ -11,7 +11,6 @@ import com.mongodb.client.result.UpdateResult;
 import com.peakcentre.web.mongo.*;
 
 import Util.peakcentreUtil;
-import sun.swing.UIAction;
 
 //Used for User Account related database manipulation
 
@@ -273,6 +272,29 @@ public class UserinfoDao {
 
 	}
 
+	public ArrayList<Userinfo> getUserinfo(final String username){
+		userCollection = connec.getRequiredCollection("Userinfo");
+
+		ArrayList<Userinfo> list = new ArrayList<Userinfo>();
+
+		Document doc = new Document("username", username);
+
+		FindIterable<Document> userList = userCollection.find(doc);
+
+		if (userList != null) {
+
+			for (Document user : userList) {
+				//create userinfo with values in user(Document).
+				list.add(peakcentreUtil.setValuesForUserByDoc(user));
+			}
+
+		}
+
+		connec.closeConnection();
+
+		return list;
+		
+	}
 	// Update table userinfo
 	public boolean updateUserinfo(Userinfo user, final String userId) {
 		userCollection = connec.getRequiredCollection("Userinfo");

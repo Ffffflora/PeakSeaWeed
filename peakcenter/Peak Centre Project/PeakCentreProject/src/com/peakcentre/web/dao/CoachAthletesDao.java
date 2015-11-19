@@ -1,22 +1,13 @@
 package com.peakcentre.web.dao;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.bson.Document;
-
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.peakcentre.web.entity.TestResult;
 import com.peakcentre.web.entity.Userinfo;
 import com.peakcentre.web.mongo.MongoDBConnection;
-import com.sun.istack.internal.FinalArrayList;
 
-import Util.peakcentreUtil;
 
 public class CoachAthletesDao {
 	MongoDBConnection connec = new MongoDBConnection();

@@ -432,9 +432,7 @@
             }]
           }"></script>
 	<script>
-		<%
-		if ("administrator".equals(usertype)) {
-		%>
+
 		$('#userProfileSearch').click(function(){
 			$("#errmessage").html("");
 			var post = {
@@ -523,7 +521,7 @@
 				}
 			});
 		})
-		<% } %>
+		
 		////////////////////////////////////////////////
 		//load graph
 		window.onload = function() {

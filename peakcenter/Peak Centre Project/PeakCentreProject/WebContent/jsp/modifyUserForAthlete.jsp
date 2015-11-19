@@ -1,4 +1,5 @@
 <!doctype html>
+<%@page import="com.peakcentre.web.dao.UserinfoDao"%>
 <html lang="en">
 <%@ page import="java.util.ResourceBundle"%>
 <%@ page import="java.util.Locale"%>
@@ -203,20 +204,12 @@
 				<form id="modifyuser_form" method="post" action="ModifyUserServlet"
 					enctype="multipart/form-data">
 					<%
-						final DatabaseConnection dbc = new DatabaseConnection();;
-						final Connection conn = dbc.getConnection();
-						PreparedStatement pstmt = null;
+						final UserinfoDao uiDao = new UserinfoDao();
 						String username = session.getAttribute("username").toString();
-
-						String sql = "SELECT id,usertype,username,password,fname,lname,picpath,level,gender,dob,city FROM userinfo where username=?";
-
-						pstmt = conn.prepareStatement(sql);
-						pstmt.setString(1, username);
-						ResultSet rs = pstmt.executeQuery();
-						if (rs.next()) {
+						ArrayList<Userinfo> userList = uiDao.getUserinfo(username);
+						if (userList.size() > 0) {
 					%>
 
-					<input name="id" type="hidden" value="<%=rs.getInt(1)%>" />
 					<div class="form-row">
 						<label class="form-label">Type of User</label>
 						<div class="form-item">
@@ -230,21 +223,21 @@
 						<p class="form-label">Username</p>
 						<div class="form-item">
 							<input type="text" name="username" required
-								value=<%=rs.getString(3)%> readonly />
+								value=<%=userList.get(0).getUsername()%> readonly />
 						</div>
 					</div>
 					<div class="form-row">
 						<p class="form-label">Password</p>
 						<div class="form-item">
 							<input id="password" type="password" name="password" required
-								value=<%=rs.getString(4)%> />
+								value=<%=userList.get(0).getPassword()%> />
 						</div>
 					</div>
 					<div class="form-row">
 						<p class="form-label">Re-enter Password</p>
 						<div class="form-item">
 							<input id="repassword" type="password" name="repassword" required
-								value=<%=rs.getString(4)%> onkeyup="checkPass(); return false;" />
+								value=<%=userList.get(0).getPassword() %> onkeyup="checkPass(); return false;" />
 						</div>
 					</div>
 					<div class="form-row">
@@ -263,14 +256,14 @@
 						<p class="form-label">First Name</p>
 						<div class="form-item">
 							<input type="text" name="fname" required
-								value=<%=rs.getString(5)%> />
+								value=<%=userList.get(0).getFname()%> />
 						</div>
 					</div>
 					<div class="form-row">
 						<p class="form-label">Last Name</p>
 						<div class="form-item">
 							<input type="text" name="lname" required
-								value=<%=rs.getString(6)%> />
+								value=<%=userList.get(0).getLname()%> />
 						</div>
 					</div>
 					<div class="form-row">
@@ -278,7 +271,7 @@
 						<div class="form-item file-upload">
 							<input value="Select a file to change..." /><input name="pic"
 								class="filebase" type='file' id="imgInp" /> <img id="blah"
-								src="http://localhost:8080/pic/<%=rs.getString(7)%>"
+								src="http://localhost:8080/pic/<%=userList.get(0).getPicpath()%>"
 								alt="Preview" height="60" width="60" />
 						</div>
 					</div>
@@ -287,7 +280,7 @@
 						<div class="form-item">
 							<select name="gender">
 								<%
-									if (rs.getString(9).equals("Male")) {
+									if (userList.get(0).getGender().equals("Male")) {
 								%>
 								<option selected="selected" value='Male'>Male</option>
 								<option value='Female'>Female</option>
@@ -295,7 +288,7 @@
 									}
 								%>
 								<%
-									if (rs.getString(9).equals("Female")) {
+									if (userList.get(0).getGender().equals("Female")) {
 								%>
 								<option value='Male'>Male</option>
 								<option selected="selected" value='Female'>Female</option>
@@ -305,19 +298,19 @@
 							</select>
 						</div>
 					</div>
-					<input name="level" type="hidden" value=<%=rs.getString(8)%> />
+					<input name="level" type="hidden" value=<%=userList.get(0).getLevel()%> />
 					<div class="form-row">
 						<label class="form-label">Date of Birth</label>
 						<div class="form-item">
 							<input type="text" id="datepicker" name="dob" required
-								value=<%=rs.getString(10)%> />
+								value=<%=userList.get(0).getDob()%> />
 						</div>
 					</div>
 					<div class="form-row">
 						<p class="form-label">City</p>
 						<div class="form-item">
 							<input type="text" name="city" readonly
-								value=<%=rs.getString(11)%> />
+								value=<%=userList.get(0).getCity()%> />
 						</div>
 					</div>
 					<div class="form-row" style="text-align: right;">

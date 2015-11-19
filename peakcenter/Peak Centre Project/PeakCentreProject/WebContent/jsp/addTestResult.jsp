@@ -422,9 +422,6 @@
 		     return false;
 		 });
 		//--------test add and remove row-----------------//
-		<%
-		if ("administrator".equals(usertype)) {
-		%>
 		$('#userProfileSearch').click(function(){
 			$("#errmessage").html("");
 			var post = {
@@ -493,7 +490,7 @@
 
 			});
 		});
-		<%  } %>
+		
 		//-------------------------------------//
 		function submitAllJson() {
 			var AllData=[];

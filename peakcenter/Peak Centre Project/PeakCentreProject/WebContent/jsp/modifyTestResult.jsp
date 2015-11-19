@@ -457,11 +457,8 @@
             }]
           }"></script>
 	<script>
-		<%
-		if ("administrator".equals(usertype)) {
-		%>
-		/////////////////////////
-				 $(document).on('click', 'button.removebutton', function () {
+		
+		$(document).on('click', 'button.removebutton', function () {
 		     $(this).closest('tr').remove();
 		     return false;
 		 });
@@ -477,8 +474,7 @@
 		             },
 		                 'value': ''
 		         });
-		         
-		     }).end().appendTo($(this).parent().next());
+		         }).end().appendTo($(this).parent().next());
 		     i++;
 		     return false;
 		 });
@@ -593,7 +589,7 @@
 			console.log(JSON.stringify(table));
 			$('#myForm').submit();
 		}
-		<% } %>
+		
 		////////////////////////////////////////////////
 		//load graph
 		window.onload = function() {

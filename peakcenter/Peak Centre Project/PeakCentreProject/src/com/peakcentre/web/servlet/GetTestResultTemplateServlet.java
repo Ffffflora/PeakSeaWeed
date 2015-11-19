@@ -79,7 +79,7 @@ public class GetTestResultTemplateServlet extends HttpServlet {
 		String tempPath = tdao.getTempPathByName(templateName);
 
 		//read template xml file
-		File f = new File("/Users/sunmingyang/Documents/temp/" + tempPath);
+		File f = new File(tempPath);
 		String html = "<input type='hidden' name='username' value='" + username
 				+ "'>";
 		html += "<input type='hidden' name='tempId' value='" + tempId + "'>";
