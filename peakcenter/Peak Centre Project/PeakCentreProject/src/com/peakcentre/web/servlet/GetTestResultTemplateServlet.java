@@ -69,7 +69,7 @@ public class GetTestResultTemplateServlet extends HttpServlet {
 		String lname = request.getParameter("lname");
 		int i = Integer.parseInt(request.getParameter("userlist"));
 
-		list = uidao.getUserinfo(fname, lname);
+		list = uidao.getUserinfoByFnameAndLname(fname, lname);
 		ui = list.get(i);
 
 		String username = ui.getUsername();
@@ -224,7 +224,7 @@ public class GetTestResultTemplateServlet extends HttpServlet {
 		//return printed html code
 		request.setAttribute("html", html);
 
-		rd = request.getRequestDispatcher("addTestResult.jsp");
+		rd = request.getRequestDispatcher("testresultAddTestResult.jsp");
 		rd.forward(request, response);
 
 	}
