@@ -116,7 +116,7 @@ public class SaveTemplateServlet extends HttpServlet {
 		}
 
 		// create template xml file in local disk
-		File f = new File("/Users/sunmingyang/Documents/temp/" + temppath);
+		File f = new File(temppath);
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 		String xml = "<root>";
 

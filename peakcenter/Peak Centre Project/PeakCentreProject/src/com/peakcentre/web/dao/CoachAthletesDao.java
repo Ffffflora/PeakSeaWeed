@@ -1,22 +1,13 @@
 package com.peakcentre.web.dao;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.bson.Document;
-
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.peakcentre.web.entity.TestResult;
 import com.peakcentre.web.entity.Userinfo;
 import com.peakcentre.web.mongo.MongoDBConnection;
-import com.sun.istack.internal.FinalArrayList;
 
-import Util.peakcentreUtil;
 
 public class CoachAthletesDao {
 	MongoDBConnection connec = new MongoDBConnection();
@@ -24,49 +15,31 @@ public class CoachAthletesDao {
 	UserinfoDao uiDao = new UserinfoDao();
 
 	// insert data into TestResult Table
-	public void insertAthlete(String athId, String coachId) {
-		boolean userExist = uiDao.checkUserExistsWithUserId(athId) && uiDao.checkUserExistsWithUserId(coachId);
-		if (!userExist) {
+	public void insertAthlete(String athUsername, String coachUsername) {
+		boolean bothExist = uiDao.checkExistsByUsernameAndType(athUsername, "Athlete")
+				&& uiDao.checkExistsByUsernameAndType(coachUsername, "Coach");
+		if (!bothExist || checkRelationshipExists(athUsername, coachUsername)) {
 			return;
 		}
 		UserinfoDao userinfoDao = new UserinfoDao();
-		final String athName = userinfoDao.getUserinfoById(athId).getUsername();
-		final String coaName = userinfoDao.getUserinfoById(coachId).getUsername();
 		// Connect to the Collection(Table)
 		athletesCollection = connec.getRequiredCollection("CoachAthletes");
 		// insert to mongodb
-		athletesCollection.insertOne(new Document("athId", athId)
-				.append("coachId", coachId)
-				.append("coachName", athName)
-				.append("athName", athName));
+		athletesCollection.insertOne(new Document("athUsername", athUsername)
+				.append("coachUsername", coachUsername));
 		// Close the Connection
 		connec.closeConnection();
 	}
 
-	public ArrayList<String> getAtheltesNames(String coachId) {
+	public ArrayList<Userinfo> getAtheltes(final String coachUsername) {
 		athletesCollection = connec.getRequiredCollection("CoachAthletes");
-		FindIterable<Document> athIdList = athletesCollection.find(new Document("coachId", coachId));
-
-		ArrayList<String> nameList = new ArrayList<>();
-		if (athIdList != null) {
-			for (Document document : athIdList) {
-				String athName = uiDao.getUserinfoById(document.get("id").toString()).getUsername();
-				nameList.add(athName);
-			}
-		}
-
-		connec.closeConnection();
-		return nameList;
-	}
-
-	public ArrayList<Userinfo> getAtheltes(String coachId) {
-		athletesCollection = connec.getRequiredCollection("CoachAthletes");
-		FindIterable<Document> athIdList = athletesCollection.find(new Document("coachId", coachId));
+		FindIterable<Document> athIdList = athletesCollection.find(
+				new Document("coachUsername", coachUsername));
 
 		ArrayList<Userinfo> athList = new ArrayList<>();
 		if (athIdList != null) {
 			for (Document document : athIdList) {
-				Userinfo athlete = uiDao.getUserinfoById(document.get("id").toString());
+				Userinfo athlete = uiDao.getUserinfoByUsernameAndType(document.get("athUsername").toString(), "Athlete");
 				athList.add(athlete);
 			}
 		}
@@ -75,11 +48,11 @@ public class CoachAthletesDao {
 		return athList;
 	}
 
-	public boolean deleteRelationship(final String coachId, final String athId) {
+	public boolean deleteRelationship(final String athUsername, final String coachUsername) {
 		boolean flag = false;
 		athletesCollection = connec.getRequiredCollection("CoachAthletes");
 		final long previousCount = athletesCollection.count();
-		Document doc = new Document("coachId", coachId).append("athId", athId);
+		Document doc = new Document("coachUsername", coachUsername).append("athUsername", athUsername);
 		athletesCollection.deleteOne(doc);
 		if (athletesCollection.count() < previousCount) {
 			flag = true;
@@ -88,36 +61,37 @@ public class CoachAthletesDao {
 		return flag;
 	}
 
-	public boolean checkRelationshipExists(final String coachId, final String athId) {
+	public boolean checkRelationshipExists(final String coachUsername, final String athUsername) {
 		boolean flag = false;
 		athletesCollection = connec.getRequiredCollection("CoachAthletes");
-		Document doc = new Document("coachId", coachId).append("athId", athId);
+		Document doc = new Document("coachUsername", coachUsername).append("athUsername", athUsername);
 		FindIterable<Document> relationshipList = athletesCollection.find(doc);
 		flag = (relationshipList.first() != null);
 		connec.closeConnection();
 		return flag;
 	}
 	
-	public ArrayList<Userinfo> getAllathByPage(final String coachId, int pageSize, int pageIndex) {
+	public ArrayList<Userinfo> getAllathByPage(final String coachUsername, int pageSize, int pageIndex) {
 		athletesCollection = connec.getRequiredCollection("CoachAthletes");
 		UserinfoDao uiDao = new UserinfoDao();
 		BasicDBObject sort = new BasicDBObject();
 		sort.put("athName", 1);
-		FindIterable<Document> cursor = athletesCollection.find(new Document("coachId", coachId))
+		FindIterable<Document> cursor = athletesCollection.find(new Document("coachUsername", coachUsername))
 				.sort(sort).skip(pageIndex * pageSize).limit(pageSize);
 		ArrayList<Userinfo> athListByPage = new ArrayList<>();
 		for (Document doc : cursor) {
 			if (doc != null) {
 				UserinfoDao userinfoDao = new UserinfoDao();
-				athListByPage.add(userinfoDao.getUserinfoById(doc.get("athId").toString()));
+				athListByPage.add(userinfoDao.getUserinfoByUsernameAndType(doc.get("athUsername").toString(), "Athlete"));
 			}
 		}
 		return athListByPage;
 	}
 	
-	public int getTotalPage(final int pageSize, final String coachId){
+	public int getTotalPage(final int pageSize, final String coachUsername){
 		athletesCollection = connec.getRequiredCollection("CoachAthletes");
-		FindIterable<Document> athList = athletesCollection.find(new Document("coachId", coachId));
+		FindIterable<Document> athList = athletesCollection.find(
+				new Document("coachUsername", coachUsername));
 		int totalPage = 0;
 		for (Document document : athList) {
 			totalPage++;

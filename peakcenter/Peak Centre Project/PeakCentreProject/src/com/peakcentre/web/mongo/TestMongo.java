@@ -22,7 +22,7 @@ public class TestMongo {
 		ui.setUsername("222@a.com");
 		ui.setUsertype("Administrator");
 		
-		System.out.println("Result : " + ud.checkUsername("t"));
+		System.out.println("Result : " + ud.checkExistByUsername("t"));
 	}
 
 }

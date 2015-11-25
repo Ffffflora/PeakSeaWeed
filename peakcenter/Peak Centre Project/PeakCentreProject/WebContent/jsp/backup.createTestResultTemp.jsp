@@ -87,7 +87,7 @@
 							<%
 								} else if ("athlete".equals(usertype)) {
 							%>
-							<li><a href="viewTestResultForAthlete.jsp">View</a></li>
+							<li><a href="testresultViewTestResultForAthlete.jsp">View</a></li>
 							<%
 								}
 							%>
@@ -157,7 +157,7 @@
 							src="../image/nav/icn-active.png" alt="" />
 							<p>TR Template</p></a>
 						<ul class="sub-nav">
-							<li><a href="createTestResultTemp.jsp">Create</a></li>
+							<li><a href="templateCreateTestResultTemp.jsp">Create</a></li>
 							<li><a href="deleteTestResultTemp.jsp">Delete</a></li>
 						</ul></li>
 					<%
@@ -167,7 +167,7 @@
 							alt="" />
 							<p>TR Template</p></a>
 						<ul class="sub-nav">
-							<li><a href="createTestResultTemp.jsp">Create</a></li>
+							<li><a href="templateCreateTestResultTemp.jsp">Create</a></li>
 						</ul></li>
 					<%
 						}
