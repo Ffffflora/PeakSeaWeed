@@ -237,7 +237,7 @@
 				table += '<div class="box-head">' + '<h2>Training Plan - Week'
 						+ (i + 1) + '</h2>' + '</div>'
 						+ '<div class="box-content no-pad">';
-				table += '<table id="myDataTable' + String(i) + '" >';
+				table += '<table id="myDataTable' + String(i) + '">';
 				table += '<thead>' + '<tr>' + '<th>Sunday</th>'
 						+ '<th>Monday</th>' + '<th>Tuesday</th>'
 						+ '<th>Wednesday</th>' + '<th>Thursday</th>'
@@ -280,7 +280,6 @@
 						+ '<td class="read_only">ST2</td>'
 						+ '<td class="read_only">B Z3 15s</td>' + '<td></td>'
 						+ '</tr>';
-						
 				table += '</tbody>';
 				table += '</table>';
 				table += '</div>' + '</div>';

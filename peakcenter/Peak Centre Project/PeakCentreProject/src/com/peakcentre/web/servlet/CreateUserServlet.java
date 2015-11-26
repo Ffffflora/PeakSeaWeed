@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -65,7 +63,7 @@ public class CreateUserServlet extends HttpServlet {
 		String usrname_message;
 		String password_message;
 		String empty_message;
-		
+
 		String usertype = null;
 		String username = null;
 		String password = null;
@@ -149,25 +147,12 @@ public class CreateUserServlet extends HttpServlet {
 				rd.forward(request, response);
 			} else {
 				// Validate password match
-				do{
-				    if (!password.equals(repassword)) {
-					    password_message = resb.getString("PASSWORD_NOT_MATCH");
-					    request.setAttribute("password_message", password_message);
-					    rd = request.getRequestDispatcher("createUser.jsp");
-					    rd.forward(request, response);
-					    break;
-				    }
-
-				    String str = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
-				    Pattern p = Pattern.compile(str);
-				    Matcher m = p.matcher(username);
-				    if(!m.matches()){
-				    	request.setAttribute("usrname_message", "Format Do not Match!");
-					    rd = request.getRequestDispatcher("createUser.jsp");
-					    rd.forward(request, response);
-					    break;
-				    }
-				    
+				if (!password.equals(repassword)) {
+					password_message = resb.getString("PASSWORD_NOT_MATCH");
+					request.setAttribute("password_message", password_message);
+					rd = request.getRequestDispatcher("createUser.jsp");
+					rd.forward(request, response);
+				} else {
 					// Insert into db
 					ui.setUsertype(usertype);
 					ui.setUsername(username);
@@ -205,17 +190,17 @@ public class CreateUserServlet extends HttpServlet {
 							if (!item.isFormField()) {
 								File saveFile = new File(toPicDirectory
 										+ toFileName);
-//								try {
-//									item.write(saveFile);
-//								} catch (Exception e) {
-//									e.printStackTrace();
-//								}
+								try {
+									item.write(saveFile);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
 						}
 						//return to main page
 						response.sendRedirect("dashboard.jsp");
 					}
-				}while(false);
+				}
 			}
 		}
 
