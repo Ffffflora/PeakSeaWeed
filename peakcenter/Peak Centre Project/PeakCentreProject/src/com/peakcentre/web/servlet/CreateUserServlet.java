@@ -135,7 +135,7 @@ public class CreateUserServlet extends HttpServlet {
 				|| (city != null && city.isEmpty())) {
 			empty_message = resb.getString("EMPTY_MESSAGE_CREATE_USER");
 			request.setAttribute("empty_message", empty_message);
-			rd = request.getRequestDispatcher("createUser.jsp");
+			rd = request.getRequestDispatcher("useraccountCreateUser.jsp");
 			rd.forward(request, response);
 		} else {
 			// Validate whether username already exists
@@ -143,14 +143,14 @@ public class CreateUserServlet extends HttpServlet {
 			if (!flag) {
 				usrname_message = resb.getString("USERNAME_EXISTS");
 				request.setAttribute("usrname_message", usrname_message);
-				rd = request.getRequestDispatcher("createUser.jsp");
+				rd = request.getRequestDispatcher("useraccountCreateUser.jsp");
 				rd.forward(request, response);
 			} else {
 				// Validate password match
 				if (!password.equals(repassword)) {
 					password_message = resb.getString("PASSWORD_NOT_MATCH");
 					request.setAttribute("password_message", password_message);
-					rd = request.getRequestDispatcher("createUser.jsp");
+					rd = request.getRequestDispatcher("useraccountCreateUser.jsp");
 					rd.forward(request, response);
 				} else {
 					// Insert into db
