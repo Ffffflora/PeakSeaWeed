@@ -72,7 +72,7 @@ if(session2.getAttribute("username")==null){
 					<div class="form-row">
 						<label class="form-label">*Type of User</label>
 						<div class="form-item">
-							<select name="usertype">
+							<select name="usertype" id = "usertype">
 								<option value='Administrator'>Administrator</option>
 								<option value='Coach'>Coach</option>
 								<option value='Athlete'>Athlete</option>
@@ -82,12 +82,12 @@ if(session2.getAttribute("username")==null){
 					<div class="form-row">
 						<p class="form-label">*Username</p>
 						<div class="form-item">
-							<input type="text" name="username" required />
+						    <input id="username" type="text" name="username" onkeyup="checkUsername(); return false;"required />
 						</div>
 					</div>
 					<div class="form-row">
 						<p class="form-label"></p>
-						<div class="form-item">
+						<div class="form-item" id="confirmUsernameFormat">
 							<%
 								if (request.getAttribute("usrname_message") != null) {
 							%>
@@ -194,12 +194,19 @@ if(session2.getAttribute("username")==null){
 					</div>
 
 					<div class="form-row" style="text-align: right;">
-						<input type="submit" class="button green" value="submit">
+					    <input type="button" class="button green" onclick='formSubmit()' value="submit">
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
+	
+	<div id="dialog_name" title="Comfirmation">
+		<div>
+			<p>Some of your information format not matched, please resubmit</p >
+		</div>
+	</div>
+	
 	<div class="footer">
 		<p>© Peak Centre. All rights reserved.</p>
 	</div>
@@ -260,6 +267,17 @@ if(session2.getAttribute("username")==null){
 			});
 
 			$("#colorpicker").ColorPicker();
+			
+			$("#dialog_name").dialog({
+				autoOpen : false,
+				resizable : false,
+				modal : true,
+				buttons: {
+	                Ok: function() {
+	                    $( this ).dialog( "close" );
+	                }
+	            }
+			});
 
 			function readURL(input) {
 				if (input.files && input.files[0]) {
@@ -308,6 +326,69 @@ if(session2.getAttribute("username")==null){
 				message.innerHTML = "Passwords Do Not Match!";
 			}
 		}
+		
+		function formSubmit() {	
+			
+			var post = {
+					username : $("#createuser_form").find("input[name=username]").val(),
+					usertype : $("#createuser_form").find("input[name=usertype]").val(),
+			};
+			
+			$.post('AjaxCheckUsernameRepeat',post, function(data){
+				
+				console.log("data");
+				console.log(data);
+				
+				if(!data && isUsernameLegal) {
+					console.log("here in true")
+					document.getElementById('createuser_form').submit();
+					//return true;
+				} else {
+					
+				    if(data){
+				    	var badColor = "#ff6666";
+				    	var message = document.getElementById('confirmUsernameFormat');
+				    	message.style.fontSize = "11px";
+						message.style.color = badColor;
+						message.innerHTML = "The user name already exist, please use another one";
+				    }
+					console.log("here in false");
+					$("#dialog_name").dialog("open");
+					//return false;
+				}
+				
+				
+			});
+		}
+		
+		function checkUsername() { 
+			isUsernameLegal = false;
+			var email = document.getElementById("username").value;   
+			var message = document.getElementById('confirmUsernameFormat');
+			//Set the colors we will be using ...
+			var goodColor = "#66cc66";
+			var badColor = "#ff6666";
+			//Compare the values in the password field 
+			//and the confirmation field
+			if(!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(email)) {
+				//The passwords match. 
+				//Set the color to the good color and inform
+				//the user that they have entered the correct password 
+				//email.style.backgroundColor = goodColor;
+				message.style.fontSize = "11px";
+				message.style.color = badColor;
+				message.innerHTML = "Format Do not Match!";
+			} else {
+				//The passwords do not match.
+				//Set the color to the bad color and
+				//notify the user.
+				//email.style.backgroundColor = badColor;
+				message.style.fontSize = "11px";
+				message.style.color = goodColor;
+				message.innerHTML = "Format Match!";
+				isUsernameLegal = true;
+			}
+	    } 
 	</script>
 </body>
 </html>
