@@ -3,6 +3,7 @@ package com.peakcentre.web.dao;
 import java.util.ArrayList;
 import org.bson.Document;
 import com.mongodb.BasicDBObject;
+import com.mongodb.MongoQueryException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.peakcentre.web.entity.Userinfo;
@@ -76,15 +77,23 @@ public class CoachAthletesDao {
 		UserinfoDao uiDao = new UserinfoDao();
 		BasicDBObject sort = new BasicDBObject();
 		sort.put("athName", 1);
-		FindIterable<Document> cursor = athletesCollection.find(new Document("coachUsername", coachUsername))
-				.sort(sort).skip(pageIndex * pageSize).limit(pageSize);
 		ArrayList<Userinfo> athListByPage = new ArrayList<>();
-		for (Document doc : cursor) {
-			if (doc != null) {
-				UserinfoDao userinfoDao = new UserinfoDao();
-				athListByPage.add(userinfoDao.getUserinfoByUsernameAndType(doc.get("athUsername").toString(), "Athlete"));
+		try {
+			FindIterable<Document> cursor = athletesCollection.find(new Document("coachUsername", coachUsername))
+					.sort(sort).skip(pageIndex * pageSize).limit(pageSize);
+			if (cursor != null) {
+				for (Document doc : cursor) {
+					if (doc != null) {
+						UserinfoDao userinfoDao = new UserinfoDao();
+						athListByPage.add(
+								userinfoDao.getUserinfoByUsernameAndType(doc.get("athUsername").toString(), "Athlete"));
+					}
+				}
 			}
+		} catch (MongoQueryException e) {
+			// TODO: handle exception
 		}
+
 		return athListByPage;
 	}
 	

@@ -165,7 +165,7 @@ if(session2.getAttribute("username")==null){
 			<%
 				} else {
 			%>
-			<div class="box grid_4"  id="testResult" style="display: none">
+			<div class="box grid_4"  id="showtestResult" style="display: none">
 				<%
 					}
 				%>
@@ -338,6 +338,7 @@ if(session2.getAttribute("username")==null){
 			};
 			console.log("Ok:" + post.userlist);
 			$.post('AjaxGetTestResultNameAndDate',post,function(data){
+				console.log("data:" + data);
 				var nameList = data[0];
 				var dateList = data[1];
 				var list = data[2];
@@ -356,20 +357,20 @@ if(session2.getAttribute("username")==null){
 					innerHtmlDate = innerHtmlDate + "<option value='" + dateList[i] + "' >" +
 					dateList[i] + "</option>";
 				}
-				$("#testResult").find("input[name=username]").val(username);
-				$("#testResult").find("select[name=tempName]").html(innerHtmlName);
-				$("#testResult").find("select[name=date]").html(innerHtmlDate);
+				$("#showtestResult").find("input[name=username]").val(username);
+				$("#showtestResult").find("select[name=tempName]").html(innerHtmlName);
+				$("#showtestResult").find("select[name=date]").html(innerHtmlDate);
 				$("#testResultHidden").append(hiddenpart);
-				$('#testResult').css({display:'block'});
+				$('#showtestResult').css({display:'block'});
 			});
 		});
 		$("#getTestResult").click(function(){
 			var post ={
-					fname: $("#testResult").find("input[name=fname]").val(),
-					lname: $("#testResult").find("input[name=lname]").val(),
-					username: $("#testResult").find("input[name=username]").val(),
-					tempName: $("#testResult").find("select[name=tempName]").val(),
-					date: $("#testResult").find("select[name=date]").val()
+					fname: $("#showtestResult").find("input[name=fname]").val(),
+					lname: $("#showtestResult").find("input[name=lname]").val(),
+					username: $("#showtestResult").find("input[name=username]").val(),
+					tempName: $("#showtestResult").find("select[name=tempName]").val(),
+					date: $("#showtestResult").find("select[name=date]").val()
 			};
 			$.post('TestResultGetJson',post, function(data){
 				var message = data[0];

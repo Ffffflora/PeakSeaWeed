@@ -19,22 +19,19 @@ public class UserinfoDao {
 
 	// insert data into table Userinfo updated
 	public boolean insertUser(final Userinfo userinfo) {
+		System.out.println("haha");
 		Boolean flag = false;
 		// connect to database
 		userCollection = connec.getRequiredCollection("Userinfo");
 		final long previousCount = userCollection.count();
-
-		// if it exists, return false;
-		if (checkExistsByUsernameAndType(userinfo.getUsername(), userinfo.getUsertype())) {
-			return false;
-		}
-
+		
 		Document doc = new Document("usertype", userinfo.getUsertype()).append("city", userinfo.getCity())
 				.append("username", userinfo.getUsername()).append("password", userinfo.getPassword())
 				.append("fname", userinfo.getFname()).append("lname", userinfo.getLname())
 				.append("level", userinfo.getLevel()).append("gender", userinfo.getGender())
 				.append("dob", userinfo.getDob()).append("picpath", userinfo.getPicpath());
 
+		System.out.print(doc.toString());
 		userCollection.insertOne(doc);
 		// 在insert之后，就会有独一的id，所以从collection中找到之前插入的user，然后update他的id。
 
@@ -123,7 +120,6 @@ public class UserinfoDao {
 		boolean userExist = (userList.first() != null);
 		connec.closeConnection();
 		return userExist;
-
 	}
 
 	// Get a user's first name

@@ -65,15 +65,15 @@ public class LoginServlet extends HttpServlet {
 			ui.setUsername(username);
 			ui.setPassword(password);
 			ui.setUsertype(usertype);
-			String flag = "";
+			boolean flag = false;
 			//Boolean flag = false;
 			try {
-				flag = ""+uidao.checkLogin(ui);
+				flag = uidao.checkLogin(ui);
 				//flag = ModelApplier.checkLogin(ui);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			if (flag.equals("false")) {
+			if (!flag) {
 				message = resb.getString("WRONG_LOGIN_MESSAGE");
 				request.setAttribute("message", message);
 				rd = request.getRequestDispatcher("index.jsp");

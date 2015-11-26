@@ -29,15 +29,19 @@ public class ClientTeset {
 //		Userinfo ui = new Userinfo();
 //		 ui.setCity("Ottawa");
 //		 ui.setUsertype("Athlete");
-//		 ui.setUsername("a5");
+//		 ui.setUsername("a4");
 //		 ui.setPassword("123");
-//		 ui.setFname("a5");
-//		 ui.setLname("a5");
+//		 ui.setFname("a4");
+//		 ui.setLname("a4");
 //		 ui.setLevel("level");
 //		 ui.setGender("female");
 //		 doDao.insertUser(ui);
 		CoachAthletesDao coachAthletesDao = new CoachAthletesDao();
-		coachAthletesDao.deleteRelationship("a5", "c1");
+		coachAthletesDao.insertAthlete("a1", "c1");
+		coachAthletesDao.insertAthlete("a2", "c1");
+		coachAthletesDao.insertAthlete("a3", "c1");
+		coachAthletesDao.insertAthlete("a4", "c1");
+		
 	
 		////
 		// doDao.getUserinfoById("563aa2b9654171076124a2dc");

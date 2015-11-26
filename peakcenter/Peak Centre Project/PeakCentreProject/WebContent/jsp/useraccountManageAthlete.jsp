@@ -212,6 +212,7 @@ if(session2.getAttribute("username")==null){
 
 						<tbody id = "showAthsBody">
 							<%
+							if(athList!= null &&  athList.size() > 0){
 								for (Userinfo temAth : athList) {
 							%>
 							<tr id=<%=temAth.getId()%>>
@@ -230,6 +231,7 @@ if(session2.getAttribute("username")==null){
 							</tr>
 							<%
 								}
+							}
 							%>
 						</tbody>
 
@@ -282,10 +284,11 @@ if(session2.getAttribute("username")==null){
 					.click(
 							function() {
 								$("#errmessage").html("");
+						
 								var post = {
 									fname : $("input[name=fname]").val(),
 									lname : $("input[name=lname]").val(),
-									page : $('input[name=page]').val()
+			
 								};
 								console.log("fname : " + post.fname);
 								console.log("lanme : " + post.lname);

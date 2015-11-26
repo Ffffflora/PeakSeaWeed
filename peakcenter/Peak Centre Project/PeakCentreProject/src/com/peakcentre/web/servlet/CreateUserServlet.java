@@ -140,7 +140,7 @@ public class CreateUserServlet extends HttpServlet {
 		} else {
 			// Validate whether username already exists
 			Boolean flag = uidao.checkExistByUsername(username);
-			if (!flag) {
+			if (flag) {
 				usrname_message = resb.getString("USERNAME_EXISTS");
 				request.setAttribute("usrname_message", usrname_message);
 				rd = request.getRequestDispatcher("useraccountCreateUser.jsp");

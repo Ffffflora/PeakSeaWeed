@@ -64,6 +64,7 @@ public class AjaxGetTestResultNameAndDate extends HttpServlet {
 		
 		for(String s : nameList) {
 			System.out.println("Print: " + s);
+			System.out.println("Print: " + list.get(0).getUsername().toString());
 		}
 		String nameListJson = new Gson().toJson(nameList); 
 		String dateListJson = new Gson().toJson(dateList);

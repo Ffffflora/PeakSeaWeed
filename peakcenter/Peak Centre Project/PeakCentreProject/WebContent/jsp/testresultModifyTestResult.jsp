@@ -165,7 +165,7 @@ if(session2.getAttribute("username")==null){
 			<%
 				} else {
 			%>
-			<div class="box grid_4"  id="testResult" style="display: none">
+			<div class="box grid_4"  id="showTestResult" style="display: none">
 				<%
 					}
 				%>
@@ -401,20 +401,20 @@ if(session2.getAttribute("username")==null){
 					innerHtmlDate = innerHtmlDate + "<option value='" + dateList[i] + "' >" +
 					dateList[i] + "</option>";
 				}
-				$("#testResult").find("input[name=username]").val(username);
-				$("#testResult").find("select[name=tempName]").html(innerHtmlName);
-				$("#testResult").find("select[name=date]").html(innerHtmlDate);
+				$("#showTestResult").find("input[name=username]").val(username);
+				$("#showTestResult").find("select[name=tempName]").html(innerHtmlName);
+				$("#showTestResult").find("select[name=date]").html(innerHtmlDate);
 				$("#testResultHidden").append(hiddenpart);
-				$('#testResult').css({display:'block'});
+				$('#showTestResult').css({display:'block'});
 			});
 		});
 		$("#getTestResult").click(function(){
 			var post ={
-					fname: $("#testResult").find("input[name=fname]").val(),
-					lname: $("#testResult").find("input[name=lname]").val(),
-					username: $("#testResult").find("input[name=username]").val(),
-					tempName: $("#testResult").find("select[name=tempName]").val(),
-					date: $("#testResult").find("select[name=date]").val()
+					fname: $("#showTestResult").find("input[name=fname]").val(),
+					lname: $("#showTestResult").find("input[name=lname]").val(),
+					username: $("#showTestResult").find("input[name=username]").val(),
+					tempName: $("#showTestResult").find("select[name=tempName]").val(),
+					date: $("#showTestResult").find("select[name=date]").val()
 			};
 			$.post('AjaxModifyTestResult',post, function(data){
 				var message = data[0];
