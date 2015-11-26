@@ -55,7 +55,7 @@ public class CheckTemplateNameServlet extends HttpServlet {
 		if (templateName.isEmpty()) {
 			message = resb.getString("TEMPLATE_NAME_EMPTY");
 			request.setAttribute("message", message);
-			rd = request.getRequestDispatcher("templateCreateTestResultTemp.jsp");
+			rd = request.getRequestDispatcher("createTestResultTemp.jsp");
 			rd.forward(request, response);
 		} else {
 			//check if the template name already exists
@@ -64,7 +64,7 @@ public class CheckTemplateNameServlet extends HttpServlet {
 			if (!f) {
 				message = resb.getString("TEMPLATE_NAME_EXISTS");
 				request.setAttribute("message", message);
-				rd = request.getRequestDispatcher("templateCreateTestResultTemp.jsp");
+				rd = request.getRequestDispatcher("createTestResultTemp.jsp");
 				rd.forward(request, response);	
 			//template name not exist
 			} else {
@@ -72,7 +72,7 @@ public class CheckTemplateNameServlet extends HttpServlet {
 				request.setAttribute("flag", flag);
 				request.setAttribute("templateName", templateName);
 				request.getSession(true).setAttribute("templateName", templateName);
-				rd = request.getRequestDispatcher("templateCreateTestResultTemp.jsp");
+				rd = request.getRequestDispatcher("createTestResultTemp.jsp");
 				rd.forward(request, response);
 			}
 		}

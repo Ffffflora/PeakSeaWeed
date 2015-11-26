@@ -1,5 +1,4 @@
 <!doctype html>
-<%@page import="com.peakcentre.web.dao.UserinfoDao"%>
 <html lang="en">
 <%@ page import="java.util.ResourceBundle"%>
 <%@ page import="java.util.Locale"%>
@@ -33,7 +32,7 @@
 <!---Fonts-->
 <%
 	HttpSession session2 = request.getSession(false); 
-if(session2.getAttribute("username")==null){
+	if(session2.getAttribute("id")==null){
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
 		return;
     }
@@ -53,7 +52,139 @@ if(session2.getAttribute("username")==null){
 </head>
 <body>
 
-	<%@ include file="header.jsp"%>
+	<!--- HEADER -->
+
+	<div class="header">
+		<img src="../image/logo.png" alt="Logo" height="50" /></a>
+
+	</div>
+
+	<div class="top-bar">
+		<ul id="nav">
+			<li id="user-panel"><img
+				src="http://localhost:8080/PeakCentreProject/pic/<%=session.getAttribute("id")%>.jpg"
+				id="usr-avatar" alt="" />
+				<div id="usr-info">
+					<p id="usr-name">
+						Welcome back,
+						<%=session.getAttribute("fname")%>.
+					</p>
+					<form method="post" action="LogoutServlet">
+						<p>
+							<a href="#" onclick="$(this).closest('form').submit()">Logout</a>
+						</p>
+					</form>
+				</div></li>
+			<li>
+				<ul id="top-nav">
+					<li class="nav-item"><a href="dashboard.jsp"><img
+							src="../image/nav/dash.png" alt="" />
+							<p>Main Page</p></a></li>
+
+					<li class="nav-item"><a><img src="../image/nav/anlt.png"
+							alt="" />
+							<p>Test Result</p></a>
+						<ul class="sub-nav">
+							<%
+								String usertype = session.getAttribute("usertype").toString();
+								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
+							%>
+							<li><a href="addTestResult.jsp">Add</a></li>
+							<li><a href="modifyTestResult.jsp">Modify</a></li>
+							<li><a href="viewTestResult.jsp">View</a></li>
+							<%
+								} else if ("athlete".equals(usertype)) {
+							%>
+							<li><a href="viewTestResultForAthlete.jsp">View</a></li>
+							<%
+								}
+							%>
+						</ul></li>
+					<li class="nav-item"><a><img src="../image/nav/cal.png"
+							alt="" />
+							<p>Training Plan</p></a>
+						<ul class="sub-nav">
+							<%
+								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
+							%>
+							<li><a href="addTrainingPlan.jsp">Add</a></li>
+							<li><a href="modifyTrainingPlan.jsp">Modify</a></li>
+							<li><a href="viewTrainingPlan.jsp">View</a></li>
+							<%
+								} else if ("athlete".equals(usertype)) {
+							%>
+							<li><a href="viewTrainingPlan.jsp">View</a></li>
+							<%
+								}
+							%>
+						</ul></li>
+					<li class="nav-item"><a><img src="../image/nav/tb.png"
+							alt="" />
+							<p>Workout</p></a>
+						<ul class="sub-nav">
+							<%
+								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
+							%>
+							<li><a href="viewWorkout.jsp">View</a></li>
+							<%
+								} else if ("athlete".equals(usertype)) {
+							%>
+							<li><a href="addWorkout.jsp">Add</a></li>
+							<li><a href="viewWorkout.jsp">View</a></li>
+							<%
+								}
+							%>
+						</ul></li>
+					<li class="nav-item"><a><img
+							src="../image/nav/dash-active.png" alt="" />
+							<p>User Account</p></a>
+						<ul class="sub-nav">
+							<%
+								if ("administrator".equals(usertype)) {
+							%>
+							<li><a href="createUser.jsp">Create</a></li>
+							<li><a href="modifyUser.jsp">Modify</a></li>
+							<li><a href="deleteUser.jsp">Delete</a></li>
+							<%
+								} else if ("coach".equals(usertype)) {
+							%>
+							<li><a href="createUser.jsp">Create</a></li>
+							<li><a href="modifyUser.jsp">Modify</a></li>
+							<li><a href="manageAthlete.jsp">Manage</a></li>
+							<%
+								} else if ("athlete".equals(usertype)) {
+							%>
+							<li><a href="modifyUserForAthlete.jsp">Modify</a></li>
+							<%
+								}
+							%>
+						</ul></li>
+					<%
+						if ("administrator".equals(usertype)) {
+					%>
+					<li class="nav-item"><a><img src="../image/nav/icn.png"
+							alt="" />
+							<p>TR Template</p></a>
+						<ul class="sub-nav">
+							<li><a href="createTestResultTemp.jsp">Create</a></li>
+							<li><a href="deleteTestResultTemp.jsp">Delete</a></li>
+						</ul></li>
+					<%
+						} else if ("coach".equals(usertype)) {
+					%>
+					<li class="nav-item"><a><img src="../image/nav/icn.png"
+							alt="" />
+							<p>TR Template</p></a>
+						<ul class="sub-nav">
+							<li><a href="createTestResultTemp.jsp">Create</a></li>
+						</ul></li>
+					<%
+						}
+					%>
+				</ul>
+			</li>
+		</ul>
+	</div>
 
 	<!--- CONTENT AREA -->
 
@@ -72,12 +203,20 @@ if(session2.getAttribute("username")==null){
 				<form id="modifyuser_form" method="post" action="ModifyUserServlet"
 					enctype="multipart/form-data">
 					<%
-						final UserinfoDao uiDao = new UserinfoDao();
+						final DatabaseConnection dbc = new DatabaseConnection();;
+						final Connection conn = dbc.getConnection();
+						PreparedStatement pstmt = null;
 						String username = session.getAttribute("username").toString();
-						ArrayList<Userinfo> userList = uiDao.getUserinfoByUsername(username);
-						if (userList.size() > 0) {
+
+						String sql = "SELECT id,usertype,username,password,fname,lname,picpath,level,gender,dob,city FROM userinfo where username=?";
+
+						pstmt = conn.prepareStatement(sql);
+						pstmt.setString(1, username);
+						ResultSet rs = pstmt.executeQuery();
+						if (rs.next()) {
 					%>
 
+					<input name="id" type="hidden" value="<%=rs.getInt(1)%>" />
 					<div class="form-row">
 						<label class="form-label">Type of User</label>
 						<div class="form-item">
@@ -91,21 +230,21 @@ if(session2.getAttribute("username")==null){
 						<p class="form-label">Username</p>
 						<div class="form-item">
 							<input type="text" name="username" required
-								value=<%=userList.get(0).getUsername()%> readonly />
+								value=<%=rs.getString(3)%> readonly />
 						</div>
 					</div>
 					<div class="form-row">
 						<p class="form-label">Password</p>
 						<div class="form-item">
 							<input id="password" type="password" name="password" required
-								value=<%=userList.get(0).getPassword()%> />
+								value=<%=rs.getString(4)%> />
 						</div>
 					</div>
 					<div class="form-row">
 						<p class="form-label">Re-enter Password</p>
 						<div class="form-item">
 							<input id="repassword" type="password" name="repassword" required
-								value=<%=userList.get(0).getPassword() %> onkeyup="checkPass(); return false;" />
+								value=<%=rs.getString(4)%> onkeyup="checkPass(); return false;" />
 						</div>
 					</div>
 					<div class="form-row">
@@ -124,14 +263,14 @@ if(session2.getAttribute("username")==null){
 						<p class="form-label">First Name</p>
 						<div class="form-item">
 							<input type="text" name="fname" required
-								value=<%=userList.get(0).getFname()%> />
+								value=<%=rs.getString(5)%> />
 						</div>
 					</div>
 					<div class="form-row">
 						<p class="form-label">Last Name</p>
 						<div class="form-item">
 							<input type="text" name="lname" required
-								value=<%=userList.get(0).getLname()%> />
+								value=<%=rs.getString(6)%> />
 						</div>
 					</div>
 					<div class="form-row">
@@ -139,7 +278,7 @@ if(session2.getAttribute("username")==null){
 						<div class="form-item file-upload">
 							<input value="Select a file to change..." /><input name="pic"
 								class="filebase" type='file' id="imgInp" /> <img id="blah"
-								src="http://localhost:8080/pic/<%=userList.get(0).getPicpath()%>"
+								src="http://localhost:8080/pic/<%=rs.getString(7)%>"
 								alt="Preview" height="60" width="60" />
 						</div>
 					</div>
@@ -148,7 +287,7 @@ if(session2.getAttribute("username")==null){
 						<div class="form-item">
 							<select name="gender">
 								<%
-									if (userList.get(0).getGender().equals("Male")) {
+									if (rs.getString(9).equals("Male")) {
 								%>
 								<option selected="selected" value='Male'>Male</option>
 								<option value='Female'>Female</option>
@@ -156,7 +295,7 @@ if(session2.getAttribute("username")==null){
 									}
 								%>
 								<%
-									if (userList.get(0).getGender().equals("Female")) {
+									if (rs.getString(9).equals("Female")) {
 								%>
 								<option value='Male'>Male</option>
 								<option selected="selected" value='Female'>Female</option>
@@ -166,19 +305,19 @@ if(session2.getAttribute("username")==null){
 							</select>
 						</div>
 					</div>
-					<input name="level" type="hidden" value=<%=userList.get(0).getLevel()%> />
+					<input name="level" type="hidden" value=<%=rs.getString(8)%> />
 					<div class="form-row">
 						<label class="form-label">Date of Birth</label>
 						<div class="form-item">
 							<input type="text" id="datepicker" name="dob" required
-								value=<%=userList.get(0).getDob()%> />
+								value=<%=rs.getString(10)%> />
 						</div>
 					</div>
 					<div class="form-row">
 						<p class="form-label">City</p>
 						<div class="form-item">
 							<input type="text" name="city" readonly
-								value=<%=userList.get(0).getCity()%> />
+								value=<%=rs.getString(11)%> />
 						</div>
 					</div>
 					<div class="form-row" style="text-align: right;">

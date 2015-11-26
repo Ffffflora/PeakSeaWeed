@@ -59,7 +59,7 @@ public class AjaxGetTestResultNameAndDate extends HttpServlet {
 		String lname = request.getParameter("lname");
 		ArrayList<Userinfo> list = new ArrayList<Userinfo>();
 		UserinfoDao uidao = new UserinfoDao();
-		list = uidao.getUserinfoByFnameAndLname(fname, lname);
+		list = uidao.getUserinfo(fname, lname);
 
 		
 		for(String s : nameList) {
@@ -75,6 +75,7 @@ public class AjaxGetTestResultNameAndDate extends HttpServlet {
 		response.setCharacterEncoding("utf-8"); 
 		String bothJson = "["+nameListJson+","+dateListJson+","+listJson+","+usernameJson+","+fnameJson+","+lnameJson+"]"; //Put many objects in an array
 		response.getWriter().write(bothJson);
+
 	}
 
 }

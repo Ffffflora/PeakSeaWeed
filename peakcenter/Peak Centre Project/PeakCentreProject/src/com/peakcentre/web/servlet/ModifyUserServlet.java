@@ -94,6 +94,9 @@ public class ModifyUserServlet extends HttpServlet {
 				String name = item.getFieldName();
 				// get field value
 				String value = item.getString();
+				if (item.getFieldName().equals("id")) {
+					userId = value;
+				}
 				if (item.getFieldName().equals("usertype")) {
 					usertype = value;
 				}
@@ -142,6 +145,7 @@ public class ModifyUserServlet extends HttpServlet {
 				rd = request.getRequestDispatcher("modifyUser.jsp");
 				rd.forward(request, response);
 			} else {
+				System.out.println("userId" + userId);
 				// Update db
 				ui.setUsertype(usertype);
 				ui.setUsername(username);
@@ -152,12 +156,12 @@ public class ModifyUserServlet extends HttpServlet {
 				ui.setLevel(level);
 				ui.setDob(dob);
 				ui.setCity(city);
-				boolean f = uidao.updateUserinfo(ui, username, usertype);
+				boolean f = uidao.updateUserinfo(ui, userId);
 				System.out.println("Modify:" + f);
 				// update profile picture
 				if (f) {
 					String toPicDirectory = "pic/";
-					String toFileName = uidao.getUserId(ui).hashCode() + ".jpg";
+					String toFileName = String.valueOf(uidao.getUserId(ui)) + ".jpg";
 
 					DiskFileItemFactory factory1 = new DiskFileItemFactory();
 					ServletFileUpload upload1 = new ServletFileUpload(factory1);

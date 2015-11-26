@@ -55,11 +55,11 @@ public class DeleteUserServlet extends HttpServlet {
 		String lname = request.getParameter("lname");
 		int i = Integer.parseInt(request.getParameter("userlist"));
 
-		list = uidao.getUserinfoByFnameAndLname(fname, lname);
+		list = uidao.getUserinfo(fname, lname);
 		ui = list.get(i);
 		
 		//delete user from table userinfo
-		boolean flag = uidao.deleteUser(ui.getUsername(), ui.getUsertype());
+		boolean flag = uidao.deleteUser(ui.getId());
 		System.out.println("From delete user servlet: userlistt=" + i);
 		System.out.println("From delete user servlet: lname=" + lname);
 		System.out.println("From delete user servlet: fname=" + fname);

@@ -60,7 +60,7 @@ public class AjaxConfirmUser extends HttpServlet {
 		
 		int i = Integer.parseInt(request.getParameter("userlist"));
 
-		list = uidao.getUserinfoByFnameAndLname(fname, lname);
+		list = uidao.getUserinfo(fname, lname);
 		//request.setAttribute("list", list);
 		//request.setAttribute("singlelist", list.get(i));
 		

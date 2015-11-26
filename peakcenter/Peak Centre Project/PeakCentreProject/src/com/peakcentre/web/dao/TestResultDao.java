@@ -1,6 +1,12 @@
 package com.peakcentre.web.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +17,11 @@ import org.bson.Document;
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.peakcentre.web.dbc.DatabaseConnection;
 import com.peakcentre.web.entity.TestResult;
+import com.peakcentre.web.entity.TestResultTemplate;
+import com.peakcentre.web.entity.Userinfo;
+import com.sun.research.ws.wadl.Doc;
 import com.peakcentre.web.mongo.*;
 
 //Used for Test Result related database manipulation

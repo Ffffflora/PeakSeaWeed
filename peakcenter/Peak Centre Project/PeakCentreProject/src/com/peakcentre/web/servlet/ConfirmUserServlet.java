@@ -55,7 +55,7 @@ public class ConfirmUserServlet extends HttpServlet {
 		String lname = request.getParameter("lname");
 		int i = Integer.parseInt(request.getParameter("userlist"));
 
-		list = uidao.getUserinfoByFnameAndLname(fname, lname);
+		list = uidao.getUserinfo(fname, lname);
 		request.setAttribute("list", list);
 		request.setAttribute("singlelist", list.get(i));
 		rd = request.getRequestDispatcher("modifyUser.jsp");

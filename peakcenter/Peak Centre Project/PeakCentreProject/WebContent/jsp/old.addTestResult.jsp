@@ -97,7 +97,7 @@
 							<%
 								} else if ("athlete".equals(usertype)) {
 							%>
-							<li><a href="testresultViewTestResultForAthlete.jsp">View</a></li>
+							<li><a href="viewTestResultForAthlete.jsp">View</a></li>
 							<%
 								}
 							%>

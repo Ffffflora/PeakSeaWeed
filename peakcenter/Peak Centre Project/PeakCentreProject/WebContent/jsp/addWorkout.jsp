@@ -33,7 +33,7 @@
 </head>
 <%
 	HttpSession session2 = request.getSession(false); 
-if(session2.getAttribute("username")==null){
+	if(session2.getAttribute("id")==null){
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
 		return;
     }
@@ -41,8 +41,145 @@ if(session2.getAttribute("username")==null){
 <body>
 
 	<!--- HEADER -->
-	<%@ include file="header.jsp"%>
-	
+
+	<div class="header">
+		<!-- <a href="dashboard.jsp"> --> <img src="../image/logo.png" alt="Logo"
+			height="50" /></a>
+		<!-- <div class="styler">
+			<ul class="styler-show">
+				<li><div id="colorSelector-top-bar"></div></li>
+				<li><div id="colorSelector-box-head"></div></li>
+			</ul>
+		</div> -->
+	</div>
+
+	<div class="top-bar">
+		<ul id="nav">
+			<li id="user-panel"><img
+				src="http://localhost:8080/pic/<%=session.getAttribute("id")%>.jpg"
+				id="usr-avatar" alt="" />
+				<div id="usr-info">
+					<p id="usr-name">
+						Welcome back,
+						<%=session.getAttribute("fname")%>.
+					</p>
+					<form method="post" action="LogoutServlet">
+						<p>
+							<a href="#" onclick="$(this).closest('form').submit()">Logout</a>
+						</p>
+					</form>
+				</div></li>
+			<li>
+				<ul id="top-nav">
+					<li class="nav-item"><a href="dashboard.jsp"><img
+							src="../image/nav/dash.png" alt="" />
+							<p>Main Page</p></a></li>
+
+					<li class="nav-item"><a><img src="../image/nav/anlt.png"
+							alt="" />
+							<p>Test Result</p></a>
+						<ul class="sub-nav">
+							<%
+								String usertype = session.getAttribute("usertype").toString();
+								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
+							%>
+							<li><a href="addTestResult.jsp">Add</a></li>
+							<li><a href="modifyTestResult.jsp">Modify</a></li>
+							<li><a href="viewTestResult.jsp">View</a></li>
+							<%
+								} else if ("athlete".equals(usertype)) {
+							%>
+							<li><a href="viewTestResultForAthlete.jsp">View</a></li>
+							<%
+								}
+							%>
+						</ul></li>
+					<li class="nav-item"><a><img src="../image/nav/cal.png"
+							alt="" />
+							<p>Training Plan</p></a>
+						<ul class="sub-nav">
+							<%
+								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
+							%>
+							<li><a href="addTrainingPlan.jsp">Add</a></li>
+							<li><a href="modifyTrainingPlan.jsp">Modify</a></li>
+							<li><a href="viewTrainingPlan.jsp">View</a></li>
+							<%
+								} else if ("athlete".equals(usertype)) {
+							%>
+							<li><a href="viewTrainingPlan.jsp">View</a></li>
+							<%
+								}
+							%>
+						</ul></li>
+					<li class="nav-item"><a><img
+							src="../image/nav/tb-active.png" alt="" />
+							<p>Workout</p></a>
+						<ul class="sub-nav">
+							<%
+								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
+							%>
+							<li><a href="viewWorkout.jsp">View</a></li>
+							<%
+								} else if ("athlete".equals(usertype)) {
+							%>
+							<li><a href="addWorkout.jsp">Add</a></li>
+							<li><a href="viewWorkout.jsp">View</a></li>
+							<%
+								}
+							%>
+						</ul></li>
+					<li class="nav-item"><a><img src="../image/nav/dash.png"
+							alt="" />
+							<p>User Account</p></a>
+						<ul class="sub-nav">
+							<%
+								if ("administrator".equals(usertype)) {
+							%>
+							<li><a href="createUser.jsp">Create</a></li>
+							<li><a href="modifyUser.jsp">Modify</a></li>
+							<li><a href="deleteUser.jsp">Delete</a></li>
+							<%
+								} else if ("coach".equals(usertype)) {
+							%>
+							<li><a href="createUser.jsp">Create</a></li>
+							<li><a href="modifyUser.jsp">Modify</a></li>
+							<li><a href="manageAthlete.jsp">Manage</a></li>
+							<%
+								} else if ("athlete".equals(usertype)) {
+							%>
+							<li><a href="modifyUserForAthlete.jsp">Modify</a></li>
+							<%
+								}
+							%>
+						</ul></li>
+					<%
+						if ("administrator".equals(usertype)) {
+					%>
+					<li class="nav-item"><a><img src="../image/nav/icn.png"
+							alt="" />
+							<p>TR Template</p></a>
+						<ul class="sub-nav">
+							<li><a href="createTestResultTemp.jsp">Create</a></li>
+							<li><a href="deleteTestResultTemp.jsp">Delete</a></li>
+						</ul></li>
+					<%
+						} else if ("coach".equals(usertype)) {
+					%>
+					<li class="nav-item"><a><img src="../image/nav/icn.png"
+							alt="" />
+							<p>TR Template</p></a>
+						<ul class="sub-nav">
+							<li><a href="createTestResultTemp.jsp">Create</a></li>
+						</ul></li>
+					<%
+						}
+					%>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
 	<!--- CONTENT AREA -->
 
 	<div class="content container_12">

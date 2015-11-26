@@ -90,10 +90,10 @@ public class AjaxSearchUser extends HttpServlet {
 			boolean flag;
 			//If coach, check if user exists from the same city
 			if (usertype.equals("coach")) {
-				flag = uidao.checkExistsByFnameAndLnameAndCity(fname, lname,
+				flag = uidao.checkUserExistsWithUsertype(fname, lname,
 						city);
 			} else {
-				flag = uidao.checkExistsByFnameAndLname(fname, lname);
+				flag = uidao.checkUserExists(fname, lname);
 			}
 			if (!flag) {
 				//if username does not exist
@@ -109,7 +109,7 @@ public class AjaxSearchUser extends HttpServlet {
 				//get user information from db by first name and last name
 				//result might be one or more
 				message = "";
-				list = uidao.getUserinfoByFnameAndLname(fname, lname);
+				list = uidao.getUserinfo(fname, lname);
 				String messageJson = new Gson().toJson(message); 
 				String listJson = new Gson().toJson(list); 
 				response.setContentType("application/json"); 

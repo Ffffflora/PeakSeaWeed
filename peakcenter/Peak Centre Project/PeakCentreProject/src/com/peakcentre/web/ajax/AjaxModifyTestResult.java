@@ -104,7 +104,7 @@ public class AjaxModifyTestResult extends HttpServlet {
 			if (flag) {
 				//get template xml file
 				String tempPath = tdao.getTempPathByName(tempName);
-				File f = new File(tempPath);
+				File f = new File("/Users/sunmingyang/Documents/temp/" + tempPath);
 
 				Element element = null;
 				int tableSequence = 1;

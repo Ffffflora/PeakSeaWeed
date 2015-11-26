@@ -141,7 +141,7 @@ public class CreateUserServlet extends HttpServlet {
 			rd.forward(request, response);
 		} else {
 			// Validate whether username already exists
-			Boolean flag = uidao.checkExistByUsername(username);
+			Boolean flag = uidao.checkUsername(username);
 			if (!flag) {
 				usrname_message = resb.getString("USERNAME_EXISTS");
 				request.setAttribute("usrname_message", usrname_message);
@@ -182,8 +182,7 @@ public class CreateUserServlet extends HttpServlet {
 					boolean f = uidao.insertUser(ui);
 
 					if (f) {
-						//Using
-						String idString = "" + uidao.getUserId(ui).hashCode();
+						String idString = uidao.getUserId(ui);
 						ui.setPicpath(idString + ".jpg");
 						//Save profile picture to local disk
 						String toPicDirectory = "pic/";

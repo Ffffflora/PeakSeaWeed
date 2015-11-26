@@ -202,7 +202,7 @@ public class GetTestResultServletForAthlete extends HttpServlet {
 				request.setAttribute("messageGetTestResult",
 						messageGetTestResult);
 				rd = request
-						.getRequestDispatcher("testresultViewTestResultForAthlete.jsp");
+						.getRequestDispatcher("viewTestResultForAthlete.jsp");
 				rd.forward(request, response);
 			}
 		} catch (Exception e) {
@@ -212,7 +212,7 @@ public class GetTestResultServletForAthlete extends HttpServlet {
 		//return printed html code
 		request.setAttribute("html", html);
 
-		rd = request.getRequestDispatcher("testresultViewTestResultForAthlete.jsp");
+		rd = request.getRequestDispatcher("viewTestResultForAthlete.jsp");
 		rd.forward(request, response);
 */
 	}

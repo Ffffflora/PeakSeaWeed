@@ -56,7 +56,7 @@ public class GetTestResultNameAndDateServlet extends HttpServlet {
 		String lname = request.getParameter("lname");
 		ArrayList<Userinfo> list = new ArrayList<Userinfo>();
 		UserinfoDao uidao = new UserinfoDao();
-		list = uidao.getUserinfoByFnameAndLname(fname, lname);
+		list = uidao.getUserinfo(fname, lname);
 		request.setAttribute("list", list);
 		
 		request.setAttribute("username", username);

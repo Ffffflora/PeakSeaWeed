@@ -68,41 +68,41 @@ public class SearchUserServlet extends HttpServlet {
 			request.setAttribute("message", message);
 			//return back to different page
 			if (page.equals("modify")) {
-				rd = request.getRequestDispatcher("useraccountModifyUser.jsp");
+				rd = request.getRequestDispatcher("modifyUser.jsp");
 			} else if (page.equals("delete")) {
-				rd = request.getRequestDispatcher("useraccountDeleteUser.jsp");
-			} else if (page.equals("testresultAddTestResult")) {
-				rd = request.getRequestDispatcher("testresultAddTestResult.jsp");
-			} else if (page.equals("testresultViewTestResult")) {
-				rd = request.getRequestDispatcher("testresultViewTestResult.jsp");
-			} else if (page.equals("trainingplanAddTrainingPlan")) {
-				rd = request.getRequestDispatcher("trainingplanAddTrainingPlan.jsp");
+				rd = request.getRequestDispatcher("deleteUser.jsp");
+			} else if (page.equals("addTestResult")) {
+				rd = request.getRequestDispatcher("addTestResult.jsp");
+			} else if (page.equals("viewTestResult")) {
+				rd = request.getRequestDispatcher("viewTestResult.jsp");
+			} else if (page.equals("addTrainingPlan")) {
+				rd = request.getRequestDispatcher("addTrainingPlan.jsp");
 			}
 			rd.forward(request, response);
 		} else {
 			boolean flag;
 			//If coach, check if user exists from the same city
 			if (usertype.equals("coach")) {
-				flag = uidao.checkExistsByFnameAndLnameAndCity(fname, lname,
+				flag = uidao.checkUserExistsWithUsertype(fname, lname,
 						city);
 			} else {
-				flag = uidao.checkExistsByFnameAndLname(fname, lname);
+				flag = uidao.checkUserExists(fname, lname);
 			}
 			if (!flag) {
 				message = resb.getString("USER_NAME_NOT_EXISTS");
 				request.setAttribute("message", message);
 				//return to different page
 				if (page.equals("modify")) {
-					rd = request.getRequestDispatcher("useraccountModifyUser.jsp");
+					rd = request.getRequestDispatcher("modifyUser.jsp");
 				} else if (page.equals("delete")) {
-					rd = request.getRequestDispatcher("useraccountDeleteUser.jsp");
-				} else if (page.equals("testresultAddTestResult")) {
-					rd = request.getRequestDispatcher("testresultAddTestResult.jsp");
-				} else if (page.equals("testresultViewTestResult")) {
-					rd = request.getRequestDispatcher("testresultViewTestResult.jsp");
+					rd = request.getRequestDispatcher("deleteUser.jsp");
+				} else if (page.equals("addTestResult")) {
+					rd = request.getRequestDispatcher("addTestResult.jsp");
+				} else if (page.equals("viewTestResult")) {
+					rd = request.getRequestDispatcher("viewTestResult.jsp");
 
-				} else if (page.equals("trainingplanAddTrainingPlan")) {
-					rd = request.getRequestDispatcher("trainingplanAddTrainingPlan.jsp");
+				} else if (page.equals("addTrainingPlan")) {
+					rd = request.getRequestDispatcher("addTrainingPlan.jsp");
 
 				}
 				rd.forward(request, response);
@@ -110,19 +110,19 @@ public class SearchUserServlet extends HttpServlet {
 			} else {
 				//get user information from db by first name and last name
 				//result might be one or more
-				list = uidao.getUserinfoByFnameAndLname(fname, lname);
+				list = uidao.getUserinfo(fname, lname);
 				request.setAttribute("list", list);
 				//return back to different page
 				if (page.equals("modify")) {
-					rd = request.getRequestDispatcher("useraccountModifyUser.jsp");
+					rd = request.getRequestDispatcher("modifyUser.jsp");
 				} else if (page.equals("delete")) {
-					rd = request.getRequestDispatcher("useraccountDeleteUser.jsp");
-				} else if (page.equals("testresultAddTestResult")) {
-					rd = request.getRequestDispatcher("testresultAddTestResult.jsp");
-				} else if (page.equals("testresultViewTestResult")) {
-					rd = request.getRequestDispatcher("testresultViewTestResult.jsp");
-				} else if (page.equals("trainingplanAddTrainingPlan")) {
-					rd = request.getRequestDispatcher("trainingplanAddTrainingPlan.jsp");
+					rd = request.getRequestDispatcher("deleteUser.jsp");
+				} else if (page.equals("addTestResult")) {
+					rd = request.getRequestDispatcher("addTestResult.jsp");
+				} else if (page.equals("viewTestResult")) {
+					rd = request.getRequestDispatcher("viewTestResult.jsp");
+				} else if (page.equals("addTrainingPlan")) {
+					rd = request.getRequestDispatcher("addTrainingPlan.jsp");
 				}
 				rd.forward(request, response);
 

@@ -68,6 +68,7 @@ public class LoginServlet extends HttpServlet {
 			String flag = "";
 			//Boolean flag = false;
 			try {
+				
 				flag = ""+uidao.checkLogin(ui);
 				//flag = ModelApplier.checkLogin(ui);
 			} catch (Exception e) {
@@ -83,17 +84,20 @@ public class LoginServlet extends HttpServlet {
 				HttpSession session = request.getSession(true);
 
 				String fname = uidao.getFirstName(ui);
+				String id = uidao.getUserId(ui);
 				String city = uidao.getCity(ui);
 
 				System.out.println(username);
+				System.out.println(id);
 				System.out.println(city);
 				System.out.println(usertype);
 				if(usertype.equals("Athlete")) usertype="athlete";
 				if(usertype.equals("Coach")) usertype="coach";
 				if(usertype.equals("Administrator")) usertype="administrator";
-				//save username, first name, usertype, city into session
+				//save username, first name, id, usertype, city into session
 				session.setAttribute("username", username);
 				session.setAttribute("fname", fname);
+				session.setAttribute("id", id);
 				session.setAttribute("usertype", usertype);
 				session.setAttribute("city", city);
 				

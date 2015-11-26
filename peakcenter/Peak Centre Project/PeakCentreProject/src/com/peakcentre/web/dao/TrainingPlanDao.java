@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import com.peakcentre.web.dbc.DatabaseConnection;
 import com.peakcentre.web.entity.TrainingPlan;
 import com.peakcentre.web.entity.TrainingPlanDetail;
+import com.peakcentre.web.entity.Userinfo;
 
 //Used for Training Plan related database manipulation
 public class TrainingPlanDao {
