@@ -42,14 +42,14 @@ public class AjaxDeleteMyAthlete extends HttpServlet{
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		final String athId = request.getParameter("athId");
+		final String athUsername = request.getParameter("athUsername");
 		final String pageIndex = request.getParameter("pageindex");
 		CoachAthletesDao caDao = new CoachAthletesDao();
-		if (athId != null && !athId.isEmpty()) {
-			caDao.deleteRelationship(request.getSession().getAttribute("id").toString(), athId);
+		if (athUsername != null && !athUsername.isEmpty()) {
+			caDao.deleteRelationship(athUsername, request.getSession().getAttribute("username").toString());
 		}
 		
-		ArrayList<Userinfo> newAthList = caDao.getAllathByPage(request.getSession().getAttribute("id").toString() , 3, Integer.parseInt(pageIndex));
+		ArrayList<Userinfo> newAthList = caDao.getAllathByPage(request.getSession().getAttribute("username").toString() , 3, Integer.parseInt(pageIndex));
 		System.out.println(newAthList.toArray().toString() + "size is " + newAthList.size());
 		String message = "";
 		String messageJson = new Gson().toJson(message); 

@@ -29,20 +29,18 @@ public class ClientTeset {
 //		Userinfo ui = new Userinfo();
 //		 ui.setCity("Ottawa");
 //		 ui.setUsertype("Athlete");
-//		 ui.setUsername("a5");
+//		 ui.setUsername("a4");
 //		 ui.setPassword("123");
-//		 ui.setFname("a5");
-//		 ui.setLname("a5");
+//		 ui.setFname("a4");
+//		 ui.setLname("a4");
 //		 ui.setLevel("level");
 //		 ui.setGender("female");
 //		 doDao.insertUser(ui);
 		CoachAthletesDao coachAthletesDao = new CoachAthletesDao();
-		coachAthletesDao.insertAthlete("563d72056541710d568fda17", "563c15216541710acf0d8a97");
-		coachAthletesDao.insertAthlete("563c15486541710ad129db69", "563c15216541710acf0d8a97");
-		coachAthletesDao.insertAthlete("563c15526541710ad217c1ee", "563c15216541710acf0d8a97");
-		coachAthletesDao.insertAthlete("563c15636541710ad30c56c7", "563c15216541710acf0d8a97");
-		coachAthletesDao.insertAthlete("563c159b6541710ad48674b3", "563c15216541710acf0d8a97");
-		coachAthletesDao.insertAthlete("563c159b6541710ad48674b5", "563c15216541710acf0d8a97");
+		coachAthletesDao.insertAthlete("a1", "c1");
+		coachAthletesDao.insertAthlete("a2", "c1");
+		coachAthletesDao.insertAthlete("a3", "c1");
+		coachAthletesDao.insertAthlete("a4", "c1");
 		
 	
 		////

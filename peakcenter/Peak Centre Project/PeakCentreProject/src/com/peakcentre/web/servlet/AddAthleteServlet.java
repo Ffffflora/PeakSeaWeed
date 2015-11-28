@@ -56,12 +56,12 @@ public class AddAthleteServlet extends HttpServlet {
 		String lname = request.getParameter("lname");
 		int i = Integer.parseInt(request.getParameter("userlist"));
 
-		list = uidao.getUserinfo(fname, lname);
+		list = uidao.getUserinfoByFnameAndLname(fname, lname);
 		ui = list.get(i);
 
 		// add athlete to my list
 		CoachAthletesDao caDao = new CoachAthletesDao();
-		caDao.insertAthlete(ui.getId(), request.getSession().getAttribute("id").toString());
+		caDao.insertAthlete(ui.getUsername(), request.getSession().getAttribute("username").toString());
 		response.sendRedirect("dashboard.jsp");
 	}
 

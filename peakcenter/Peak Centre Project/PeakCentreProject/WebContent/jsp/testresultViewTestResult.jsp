@@ -32,7 +32,7 @@
 <!---Fonts-->
 <%
 	HttpSession session2 = request.getSession(false); 
-	if(session2.getAttribute("id")==null){
+if(session2.getAttribute("username")==null){
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
 		return;
     }
@@ -52,141 +52,7 @@
 <body>
 
 	<!--- HEADER -->
-
-	<div class="header">
-		<!-- <a href="dashboard.jsp"> -->
-		<img src="../image/logo.png" alt="Logo" height="50" /></a>
-	</div>
-
-	<div class="top-bar">
-		<ul id="nav">
-			<li id="user-panel">
-				<!-- <img src="../image/nav/running.png"
-				id="usr-avatar" alt="" /> --> <img
-				src="http://localhost:8080/PeakCentreProject/pic/<%=session.getAttribute("id")%>.jpg"
-				id="usr-avatar" alt="" />
-				<div id="usr-info">
-					<p id="usr-name">
-						Welcome back,
-						<%=session.getAttribute("fname")%>.
-					</p>
-					<form method="post" action="LogoutServlet">
-						<p>
-							<a href="#" onclick="$(this).closest('form').submit()">Logout</a>
-						</p>
-					</form>
-				</div>
-			</li>
-			<li>
-				<ul id="top-nav">
-					<li class="nav-item"><a href="dashboard.jsp"><img
-							src="../image/nav/dash.png" alt="" />
-							<p>Main Page</p></a></li>
-
-					<li class="nav-item"><a><img
-							src="../image/nav/anlt-active.png" alt="" />
-							<p>Test Result</p></a>
-						<ul class="sub-nav">
-							<%
-								String usertype = session.getAttribute("usertype").toString();
-							if ("administrator".equals(usertype) || "coach".equals(usertype)) {
-							%>
-							<li><a href="addTestResult.jsp">Add</a></li>
-							<li><a href="modifyTestResult.jsp">Modify</a></li>
-							<li><a href="viewTestResult.jsp">View</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="viewTestResultForAthlete.jsp">View</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<li class="nav-item"><a><img src="../image/nav/cal.png"
-							alt="" />
-							<p>Training Plan</p></a>
-						<ul class="sub-nav">
-							<%
-								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
-							%>
-							<li><a href="addTrainingPlan.jsp">Add</a></li>
-							<li><a href="modifyTrainingPlan.jsp">Modify</a></li>
-							<li><a href="viewTrainingPlan.jsp">View</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="viewTrainingPlan.jsp">View</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<li class="nav-item"><a><img src="../image/nav/tb.png"
-							alt="" />
-							<p>Workout</p></a>
-						<ul class="sub-nav">
-							<%
-								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
-							%>
-							<li><a href="viewWorkout.jsp">View</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="addWorkout.jsp">Add</a></li>
-							<li><a href="viewWorkout.jsp">View</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<li class="nav-item"><a><img src="../image/nav/dash.png"
-							alt="" />
-							<p>User Account</p></a>
-						<ul class="sub-nav">
-							<%
-								if ("administrator".equals(usertype)) {
-							%>
-							<li><a href="createUser.jsp">Create</a></li>
-							<li><a href="modifyUser.jsp">Modify</a></li>
-							<li><a href="deleteUser.jsp">Delete</a></li>
-							<%
-								} else if ("coach".equals(usertype)) {
-							%>
-							<li><a href="createUser.jsp">Create</a></li>
-							<li><a href="modifyUser.jsp">Modify</a></li>
-							<li><a href="manageAthlete.jsp">Manage</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="modifyUserForAthlete.jsp">Modify</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<%
-						if ("administrator".equals(usertype)) {
-					%>
-					<li class="nav-item"><a><img src="../image/nav/icn.png"
-							alt="" />
-							<p>TR Template</p></a>
-						<ul class="sub-nav">
-							<li><a href="createTestResultTemp.jsp">Create</a></li>
-							<li><a href="deleteTestResultTemp.jsp">Delete</a></li>
-						</ul></li>
-					<%
-						} else if ("coach".equals(usertype)) {
-					%>
-					<li class="nav-item"><a><img src="../image/nav/icn.png"
-							alt="" />
-							<p>TR Template</p></a>
-						<ul class="sub-nav">
-							<li><a href="createTestResultTemp.jsp">Create</a></li>
-						</ul></li>
-					<%
-						}
-					%>
-				</ul>
-			</li>
-		</ul>
-	</div>
+	<%@ include file="header.jsp"%>
 
 	<!--- CONTENT AREA -->
 
@@ -299,7 +165,7 @@
 			<%
 				} else {
 			%>
-			<div class="box grid_4"  id="testResult" style="display: none">
+			<div class="box grid_4"  id="showtestResult" style="display: none">
 				<%
 					}
 				%>
@@ -432,9 +298,7 @@
             }]
           }"></script>
 	<script>
-		<%
-		if ("administrator".equals(usertype)) {
-		%>
+
 		$('#userProfileSearch').click(function(){
 			$("#errmessage").html("");
 			var post = {
@@ -474,6 +338,7 @@
 			};
 			console.log("Ok:" + post.userlist);
 			$.post('AjaxGetTestResultNameAndDate',post,function(data){
+				console.log("data:" + data);
 				var nameList = data[0];
 				var dateList = data[1];
 				var list = data[2];
@@ -492,20 +357,20 @@
 					innerHtmlDate = innerHtmlDate + "<option value='" + dateList[i] + "' >" +
 					dateList[i] + "</option>";
 				}
-				$("#testResult").find("input[name=username]").val(username);
-				$("#testResult").find("select[name=tempName]").html(innerHtmlName);
-				$("#testResult").find("select[name=date]").html(innerHtmlDate);
+				$("#showtestResult").find("input[name=username]").val(username);
+				$("#showtestResult").find("select[name=tempName]").html(innerHtmlName);
+				$("#showtestResult").find("select[name=date]").html(innerHtmlDate);
 				$("#testResultHidden").append(hiddenpart);
-				$('#testResult').css({display:'block'});
+				$('#showtestResult').css({display:'block'});
 			});
 		});
 		$("#getTestResult").click(function(){
 			var post ={
-					fname: $("#testResult").find("input[name=fname]").val(),
-					lname: $("#testResult").find("input[name=lname]").val(),
-					username: $("#testResult").find("input[name=username]").val(),
-					tempName: $("#testResult").find("select[name=tempName]").val(),
-					date: $("#testResult").find("select[name=date]").val()
+					fname: $("#showtestResult").find("input[name=fname]").val(),
+					lname: $("#showtestResult").find("input[name=lname]").val(),
+					username: $("#showtestResult").find("input[name=username]").val(),
+					tempName: $("#showtestResult").find("select[name=tempName]").val(),
+					date: $("#showtestResult").find("select[name=date]").val()
 			};
 			$.post('TestResultGetJson',post, function(data){
 				var message = data[0];
@@ -523,7 +388,7 @@
 				}
 			});
 		})
-		<% } %>
+		
 		////////////////////////////////////////////////
 		//load graph
 		window.onload = function() {

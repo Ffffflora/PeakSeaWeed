@@ -22,11 +22,11 @@
 <script src="../js/jquery.dataTables.min.js"></script>
 <!---Fonts-->
 <%
-	HttpSession session2 = request.getSession(false); 
-	if(session2.getAttribute("id")==null){
+	HttpSession session2 = request.getSession(false);
+	if (session2.getAttribute("username") == null) {
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
 		return;
-    }
+	}
 %>
 <link
 	href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700'
@@ -43,139 +43,7 @@
 <body>
 
 	<!--- HEADER -->
-
-	<div class="header">
-		<!-- <a href="dashboard.jsp"> -->
-		<img src="../image/logo.png" alt="Logo" height="50" /></a>
-	</div>
-
-	<div class="top-bar">
-		<ul id="nav">
-			<li id="user-panel"><img
-				src="http://localhost:8080/PeakCentreProject/pic/<%=session.getAttribute("id")%>.jpg"
-				id="usr-avatar" alt="" />
-				<div id="usr-info">
-					<p id="usr-name">
-						Welcome back,
-						<%=session.getAttribute("fname")%>.
-					</p>
-					<form method="post" action="LogoutServlet">
-						<p>
-							<a href="#" onclick="$(this).closest('form').submit()">Logout</a>
-						</p>
-					</form>
-				</div></li>
-			<li>
-				<ul id="top-nav">
-					<li class="nav-item"><a href="dashboard.jsp"><img
-							src="../image/nav/dash-active.png" alt="" />
-							<p>Main Page</p></a></li>
-
-					<li class="nav-item"><a><img src="../image/nav/anlt.png"
-							alt="" />
-							<p>Test Result</p></a>
-						<ul class="sub-nav">
-							<%
-								String usertype = session.getAttribute("usertype").toString();
-								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
-							%>
-							<li><a href="addTestResult.jsp">Add</a></li>
-							<li><a href="modifyTestResult.jsp">Modify</a></li>
-							<li><a href="viewTestResult.jsp">View</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="viewTestResultForAthlete.jsp">View</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<li class="nav-item"><a><img src="../image/nav/cal.png"
-							alt="" />
-							<p>Training Plan</p></a>
-						<ul class="sub-nav">
-							<%
-								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
-							%>
-							<li><a href="addTrainingPlan.jsp">Add</a></li>
-							<li><a href="modifyTrainingPlan.jsp">Modify</a></li>
-							<li><a href="viewTrainingPlan.jsp">View</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="viewTrainingPlan.jsp">View</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<li class="nav-item"><a><img src="../image/nav/tb.png"
-							alt="" />
-							<p>Workout</p></a>
-						<ul class="sub-nav">
-							<%
-								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
-							%>
-							<li><a href="viewWorkout.jsp">View</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="addWorkout.jsp">Add</a></li>
-							<li><a href="viewWorkout.jsp">View</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<li class="nav-item"><a><img src="../image/nav/dash.png"
-							alt="" />
-							<p>User Account</p></a>
-						<ul class="sub-nav">
-							<%
-								if ("administrator".equals(usertype)) {
-							%>
-							<li><a href="createUser.jsp">Create</a></li>
-							<li><a href="modifyUser.jsp">Modify</a></li>
-							<li><a href="deleteUser.jsp">Delete</a></li>
-							<%
-								} else if ("coach".equals(usertype)) {
-							%>
-							<li><a href="createUser.jsp">Create</a></li>
-							<li><a href="modifyUser.jsp">Modify</a></li>
-							<li><a href="manageAthlete.jsp">Manage</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="modifyUserForAthlete.jsp">Update</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<%
-						if ("administrator".equals(usertype)) {
-					%>
-					<li class="nav-item"><a><img src="../image/nav/icn.png"
-							alt="" />
-							<p>TR Template</p></a>
-						<ul class="sub-nav">
-							<li><a href="createTestResultTemp.jsp">Create</a></li>
-							<li><a href="deleteTestResultTemp.jsp">Delete</a></li>
-						</ul></li>
-					<li class="nav-item" style="float:right;" onclick="printPage()"><a><img src="../image/print.png" alt="" /><p>Print</p></a></li>
-					<%
-						} else if ("coach".equals(usertype)) {
-					%>
-					<li class="nav-item"><a><img src="../image/nav/icn.png"
-							alt="" />
-							<p>TR Template</p></a>
-						<ul class="sub-nav">
-							<li><a href="createTestResultTemp.jsp">Create</a></li>
-						</ul></li>
-					<%
-						}
-					%>
-				</ul>
-			</li>
-		</ul>
-	</div>
+	<%@ include file="header.jsp"%>
 
 	<!--- CONTENT AREA -->
 
@@ -192,24 +60,24 @@
 					<%
 						if ("administrator".equals(usertype) || "coach".equals(usertype)) {
 					%>
-					<li><a href="addTestResult.jsp"><u><p>
+					<li><a href="testresultAddTestResult.jsp"><u><p>
 									<font color="#a1b900">Add Test Result</font>
 								</p></u></a></li>
 					<p>Choose a template and add a test result for a user.</p>
 					<br>
-					<li><a href="modifyTestResult.jsp"><u><p>
+					<li><a href="testresultModifyTestResult.jsp"><u><p>
 									<font color="#a1b900">Modify Test Result</font>
 								</p></u></a></li>
 					<p>Modify the data of a test result for a user.</p>
 					<br>
-					<li><a href="viewTestResult.jsp"><u><p>
+					<li><a href="testresultViewTestResult.jsp"><u><p>
 									<font color="#a1b900">View Test Result</font>
 								</p></u></a></li>
 					<p>View a test result of a user.</p>
 					<%
 						} else if ("athlete".equals(usertype)) {
 					%>
-					<li><a href="viewTestResultForAthlete.jsp"><u><p>
+					<li><a href="testresultViewTestResultForAthlete.jsp"><u><p>
 									<font color="#a1b900">View Test Result</font>
 								</p></u></a></li>
 					<p>View your own test result.</p>
@@ -230,24 +98,24 @@
 					<%
 						if ("administrator".equals(usertype) || "coach".equals(usertype)) {
 					%>
-					<li><a href="addTrainingPlan.jsp"><u><p>
+					<li><a href="trainingplanAddTrainingPlan.jsp"><u><p>
 									<font color="#a1b900">Add Training Plan</font>
 								</p></u></a></li>
 					<p>Add a training plan for a user.</p>
 					<br>
-					<li><a href="modifyTrainingPlan.jsp"><u><p>
+					<li><a href="trainingplanModifyTrainingPlan.jsp"><u><p>
 									<font color="#a1b900">Modify Training Plan</font>
 								</p></u></a></li>
 					<p>Modify the training plan for a user.</p>
 					<br>
-					<li><a href="viewTrainingPlan.jsp"><u><p>
+					<li><a href="trainingplanViewTrainingPlan.jsp"><u><p>
 									<font color="#a1b900">View Training Plan</font>
 								</p></u></a></li>
 					<p>View a training plan of a user.</p>
 					<%
 						} else if ("athlete".equals(usertype)) {
 					%>
-					<li><a href="viewTrainingPlan.jsp"><u><p>
+					<li><a href="trainingplanViewTrainingPlan.jsp"><u><p>
 									<font color="#a1b900">View Training Plan</font>
 								</p></u></a></li>
 					<p>View your own training plan.</p>
@@ -279,12 +147,12 @@
 					<%
 						} else if ("athlete".equals(usertype)) {
 					%>
-					<li><a href="addWorkout.jsp"><u><p>
+					<li><a href="workoutAddWorkout.jsp"><u><p>
 									<font color="#a1b900">Add Workout Summary</font>
 								</p></u></a></li>
 					<p>Add your workout summary.</p>
 					<br>
-					<li><a href="viewTrainingPlan.jsp"><u><p>
+					<li><a href="trainingplanViewTrainingPlan.jsp"><u><p>
 									<font color="#a1b900">View Workout Summary</font>
 								</p></u></a></li>
 					<p>View your own workout summary.</p>
@@ -303,41 +171,41 @@
 					<%
 						if ("administrator".equals(usertype)) {
 					%>
-					<li><a href="createUser.jsp"><u><p>
+					<li><a href="useraccountCreateUser.jsp"><u><p>
 									<font color="#a1b900">Create User</font>
 								</p></u></a></li>
 					<p>Create a new user account.</p>
 					<br>
-					<li><a href="modifyUser.jsp"><u><p>
+					<li><a href="useraccountModifyUser.jsp"><u><p>
 									<font color="#a1b900">Modify User</font>
 								</p></u></a></li>
 					<p>Modify an existing user account.</p>
 					<br>
-					<li><a href="deleteUser.jsp"><u><p>
+					<li><a href="useraccountDeleteUser.jsp"><u><p>
 									<font color="#a1b900">Delete User</font>
 								</p></u></a></li>
 					<p>Delete a user account.</p>
 					<%
 						} else if ("coach".equals(usertype)) {
 					%>
-					<li><a href="createUser.jsp"><u><p>
+					<li><a href="useraccountCreateUser.jsp"><u><p>
 									<font color="#a1b900">Create User</font>
 								</p></u></a></li>
 					<p>Create a new user account.</p>
 					<br>
-					<li><a href="modifyUser.jsp"><u><p>
+					<li><a href="useraccountModifyUser.jsp"><u><p>
 									<font color="#a1b900">Modify User</font>
 								</p></u></a></li>
 					<p>Modify an existing user account.</p>
 					<br>
-					<li><a href="manageAthlete.jsp"><u><p>
+					<li><a href="useraccountManageAthlete.jsp"><u><p>
 									<font color="#a1b900">Manage Athletes</font>
 								</p></u></a></li>
 					<p>Manage my athletes.</p>
 					<%
 						} else if ("athlete".equals(usertype)) {
 					%>
-					<li><a href="modifyUserForAthlete.jsp"><u><p>
+					<li><a href="useraccountModifyUserForAthlete.jsp"><u><p>
 									<font color="#a1b900">Update</font>
 								</p></u></a></li>
 					<p>Modify an existing user account.</p>
@@ -359,12 +227,12 @@
 			<div class="box-content">
 				<ul class="circle">
 
-					<li><a href="createTestResultTemp.jsp"><u><p>
+					<li><a href="templateCreateTestResultTemp.jsp"><u><p>
 									<font color="#a1b900">Create Template</font>
 								</p></u></a></li>
 					<p>Create a new test result template.</p>
 					<br>
-					<li><a href="deleteTestResultTemp.jsp"><u><p>
+					<li><a href="templateDeleteTestResultTemp.jsp"><u><p>
 									<font color="#a1b900">Delete Template</font>
 								</p></u></a></li>
 					<p>Delete a test result template.</p>
@@ -380,7 +248,7 @@
 			</div>
 			<div class="box-content">
 				<ul class="circle">
-					<li><a href="createTestResultTemp.jsp"><u><p>
+					<li><a href="templateCreateTestResultTemp.jsp"><u><p>
 									<font color="#a1b900">Create Template</font>
 								</p></u></a></li>
 					<p>Create a new test result template.</p>

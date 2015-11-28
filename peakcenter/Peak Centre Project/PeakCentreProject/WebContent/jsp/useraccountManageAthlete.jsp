@@ -27,7 +27,7 @@
 <!---Fonts-->
 <%
 	HttpSession session2 = request.getSession(false); 
-	if(session2.getAttribute("id")==null){
+if(session2.getAttribute("username")==null){
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
 		return;
     }
@@ -48,139 +48,8 @@
 <body>
 
 	<!--- HEADER -->
-
-	<div class="header">
-		<img src="../image/logo.png" alt="Logo" height="50" /></a>
-
-	</div>
-
-	<div class="top-bar">
-		<ul id="nav">
-			<li id="user-panel"><img
-				src="http://localhost:8080/PeakCentreProject/pic/<%=session.getAttribute("id")%>.jpg"
-				id="usr-avatar" alt="" />
-				<div id="usr-info">
-					<p id="usr-name">
-						Welcome back,
-						<%=session.getAttribute("fname")%>.
-					</p>
-					<form method="post" action="LogoutServlet">
-						<p>
-							<a href="#" onclick="$(this).closest('form').submit()">Logout</a>
-						</p>
-					</form>
-				</div></li>
-			<li>
-				<ul id="top-nav">
-					<li class="nav-item"><a href="dashboard.jsp"><img
-							src="../image/nav/dash.png" alt="" />
-							<p>Main Page</p></a></li>
-
-					<li class="nav-item"><a><img src="../image/nav/anlt.png"
-							alt="" />
-							<p>Test Result</p></a>
-						<ul class="sub-nav">
-							<%
-								String usertype = session.getAttribute("usertype").toString();
-																		if ("administrator".equals(usertype) || "coach".equals(usertype)) {
-							%>
-							<li><a href="addTestResult.jsp">Add</a></li>
-							<li><a href="modifyTestResult.jsp">Modify</a></li>
-							<li><a href="viewTestResult.jsp">View</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="viewTestResultForAthlete.jsp">View</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<li class="nav-item"><a><img src="../image/nav/cal.png"
-							alt="" />
-							<p>Training Plan</p></a>
-						<ul class="sub-nav">
-							<%
-								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
-							%>
-							<li><a href="addTrainingPlan.jsp">Add</a></li>
-							<li><a href="modifyTrainingPlan.jsp">Modify</a></li>
-							<li><a href="viewTrainingPlan.jsp">View</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="viewTrainingPlan.jsp">View</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<li class="nav-item"><a><img src="../image/nav/tb.png"
-							alt="" />
-							<p>Workout</p></a>
-						<ul class="sub-nav">
-							<%
-								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
-							%>
-							<li><a href="viewWorkout.jsp">View</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="addWorkout.jsp">Add</a></li>
-							<li><a href="viewWorkout.jsp">View</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<li class="nav-item"><a><img
-							src="../image/nav/dash-active.png" alt="" />
-							<p>User Account</p></a>
-						<ul class="sub-nav">
-							<%
-								if ("administrator".equals(usertype)) {
-							%>
-							<li><a href="createUser.jsp">Create</a></li>
-							<li><a href="modifyUser.jsp">Modify</a></li>
-							<li><a href="deleteUser.jsp">Delete</a></li>
-							<%
-								} else if ("coach".equals(usertype)) {
-							%>
-							<li><a href="createUser.jsp">Create</a></li>
-							<li><a href="modifyUser.jsp">Modify</a></li>
-							<li><a href="manageAthlete.jsp">Manage</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="modifyUserForAthlete.jsp">Modify</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<%
-						if ("administrator".equals(usertype)) {
-					%>
-					<li class="nav-item"><a><img src="../image/nav/icn.png"
-							alt="" />
-							<p>TR Template</p></a>
-						<ul class="sub-nav">
-							<li><a href="createTestResultTemp.jsp">Create</a></li>
-							<li><a href="deleteTestResultTemp.jsp">Delete</a></li>
-						</ul></li>
-					<%
-						} else if ("coach".equals(usertype)) {
-					%>
-					<li class="nav-item"><a><img src="../image/nav/icn.png"
-							alt="" />
-							<p>TR Template</p></a>
-						<ul class="sub-nav">
-							<li><a href="createTestResultTemp.jsp">Create</a></li>
-						</ul></li>
-					<%
-						}
-					%>
-				</ul>
-			</li>
-		</ul>
-	</div>
-
+	<%@ include file="header.jsp"%>
+	
 	<!--- CONTENT AREA -->
 	<div class="content container_12">
 
@@ -310,7 +179,7 @@
 					<%
 						CoachAthletesDao caDao = new CoachAthletesDao();
 						int pageSize = 3;//每页显示的记录  
-						int totalpages = caDao.getTotalPage(pageSize, session.getAttribute("id").toString()) - 1; //最大页数  
+						int totalpages = caDao.getTotalPage(pageSize, session.getAttribute("username").toString()) - 1; //最大页数  
 						String currentPage = request.getParameter("pageIndex"); //获得当前的页数，即第几页  
 						if (currentPage == null) {
 							currentPage = "0";
@@ -322,7 +191,7 @@
 						} else if (pageIndex > totalpages) {
 							pageIndex = totalpages;
 						}
-						ArrayList<Userinfo> athList = caDao.getAllathByPage(session.getAttribute("id").toString(), pageSize,
+						ArrayList<Userinfo> athList = caDao.getAllathByPage(session.getAttribute("username").toString(), pageSize,
 								pageIndex); //返回特定页数的数据
 					%>
 					<!-- 循环显示员工的数据 -->
@@ -343,6 +212,7 @@
 
 						<tbody id = "showAthsBody">
 							<%
+							if(athList!= null &&  athList.size() > 0){
 								for (Userinfo temAth : athList) {
 							%>
 							<tr id=<%=temAth.getId()%>>
@@ -354,13 +224,14 @@
 								<td><%=temAth.getLevel()%></td>
 								<td>
 									<div class="form-row" style="text-align: right;">
-										<input type="button" class="button green" onclick="delMyRow('<%=temAth.getId()%>')" value="delete">
+										<input type="button" class="button green" onclick="delMyRow('<%=temAth.getUsername()%>')" value="delete">
 									</div>
 
 								</td>
 							</tr>
 							<%
 								}
+							}
 							%>
 						</tbody>
 
@@ -369,10 +240,10 @@
 					<br> <br>
 					<div align="right">
 
-						<a href="manageAthlete.jsp?pageIndex=0">First</a> <a
-							href="manageAthlete.jsp?pageIndex=<%=pageIndex - 1%>">Previous</a>
-						<a href="manageAthlete.jsp?pageIndex=<%=pageIndex + 1%>">Next</a>
-						<a href="manageAthlete.jsp?pageIndex=<%=totalpages%>">Last</a> <br>
+						<a href="useraccountManageAthlete.jsp?pageIndex=0">First</a> <a
+							href="useraccountManageAthlete.jsp?pageIndex=<%=pageIndex - 1%>">Previous</a>
+						<a href="useraccountManageAthlete.jsp?pageIndex=<%=pageIndex + 1%>">Next</a>
+						<a href="useraccountManageAthlete.jsp?pageIndex=<%=totalpages%>">Last</a> <br>
 
 						<p style="color: Green">
 							Current page:<%=pageIndex + 1%></p>
@@ -413,10 +284,11 @@
 					.click(
 							function() {
 								$("#errmessage").html("");
+						
 								var post = {
 									fname : $("input[name=fname]").val(),
 									lname : $("input[name=lname]").val(),
-									page : $('input[name=page]').val()
+			
 								};
 								console.log("fname : " + post.fname);
 								console.log("lanme : " + post.lname);
@@ -476,7 +348,7 @@
 				$("#errmessage").html("");
 				var tempPageindex = getParameter("pageIndex") == null ? 1 : getParameter("pageIndex");
 				var post = {
-						athId : j,
+						athUsername : j,
 						pageindex : tempPageindex
 				}
 				
@@ -507,7 +379,7 @@
 							mytd_4.innerHTML= list[i].city;
 							mytd_5.innerHTML= list[i].level;
 							mytd_6.innerHTML= "<td><div class=\"form-row\" style=\"text-align: right;\">"
-											+ "<input type='button' value='delete' class='button green' onclick=\"delMyRow('"+list[i].id+"')\"></div></td>"
+											+ "<input type='button' value='delete' class='button green' onclick=\"delMyRow('"+list[i].username+"')\"></div></td>"
 						}
 						
 						var alertText = document.getElementById("showTextForDeletedAth");

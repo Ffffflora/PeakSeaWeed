@@ -31,7 +31,7 @@
 </head>
 <%
 	HttpSession session2 = request.getSession(false); 
-	if(session2.getAttribute("id")==null){
+if(session2.getAttribute("username")==null){
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
 		return;
     }
@@ -39,138 +39,7 @@
 <body>
 
 	<!--- HEADER -->
-
-	<div class="header">
-		<!-- <a href="dashboard.jsp"> -->
-		<img src="../image/logo.png" alt="Logo" height="50" /></a>
-	</div>
-
-	<div class="top-bar">
-		<ul id="nav">
-			<li id="user-panel"><img
-				src="http://localhost:8080/PeakCentreProject/pic/<%=session.getAttribute("id")%>.jpg"
-				id="usr-avatar" alt="" />
-				<div id="usr-info">
-					<p id="usr-name">
-						Welcome back,
-						<%=session.getAttribute("fname")%>.
-					</p>
-					<form method="post" action="LogoutServlet">
-						<p>
-							<a href="#" onclick="$(this).closest('form').submit()">Logout</a>
-						</p>
-					</form>
-				</div></li>
-			<li>
-				<ul id="top-nav">
-					<li class="nav-item"><a href="dashboard.jsp"><img
-							src="../image/nav/dash.png" alt="" />
-							<p>Main Page</p></a></li>
-
-					<li class="nav-item"><a><img src="../image/nav/anlt.png"
-							alt="" />
-							<p>Test Result</p></a>
-						<ul class="sub-nav">
-							<%
-								String usertype = session.getAttribute("usertype").toString();
-								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
-							%>
-							<li><a href="addTestResult.jsp">Add</a></li>
-							<li><a href="modifyTestResult.jsp">Modify</a></li>
-							<li><a href="viewTestResult.jsp">View</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="viewTestResultForAthlete.jsp">View</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<li class="nav-item"><a><img src="../image/nav/cal.png"
-							alt="" />
-							<p>Training Plan</p></a>
-						<ul class="sub-nav">
-							<%
-								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
-							%>
-							<li><a href="addTrainingPlan.jsp">Add</a></li>
-							<li><a href="modifyTrainingPlan.jsp">Modify</a></li>
-							<li><a href="viewTrainingPlan.jsp">View</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="viewTrainingPlan.jsp">View</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<li class="nav-item"><a><img src="../image/nav/tb.png"
-							alt="" />
-							<p>Workout</p></a>
-						<ul class="sub-nav">
-							<%
-								if ("administrator".equals(usertype) || "coach".equals(usertype)) {
-							%>
-							<li><a href="viewWorkout.jsp">View</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="addWorkout.jsp">Add</a></li>
-							<li><a href="viewWorkout.jsp">View</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<li class="nav-item"><a><img
-							src="../image/nav/dash-active.png" alt="" />
-							<p>User Account</p></a>
-						<ul class="sub-nav">
-							<%
-								if ("administrator".equals(usertype)) {
-							%>
-							<li><a href="createUser.jsp">Create</a></li>
-							<li><a href="modifyUser.jsp">Modify</a></li>
-							<li><a href="deleteUser.jsp">Delete</a></li>
-							<%
-								} else if ("coach".equals(usertype)) {
-							%>
-							<li><a href="createUser.jsp">Create</a></li>
-							<li><a href="modifyUser.jsp">Modify</a></li>
-							<li><a href="manageAthlete.jsp">Manage</a></li>
-							<%
-								} else if ("athlete".equals(usertype)) {
-							%>
-							<li><a href="modifyUserForAthlete.jsp">Modify</a></li>
-							<%
-								}
-							%>
-						</ul></li>
-					<%
-						if ("administrator".equals(usertype)) {
-					%>
-					<li class="nav-item"><a><img src="../image/nav/icn.png"
-							alt="" />
-							<p>TR Template</p></a>
-						<ul class="sub-nav">
-							<li><a href="createTestResultTemp.jsp">Create</a></li>
-							<li><a href="deleteTestResultTemp.jsp">Delete</a></li>
-						</ul></li>
-					<%
-						} else if ("coach".equals(usertype)) {
-					%>
-					<li class="nav-item"><a><img src="../image/nav/icn.png"
-							alt="" />
-							<p>TR Template</p></a>
-						<ul class="sub-nav">
-							<li><a href="createTestResultTemp.jsp">Create</a></li>
-						</ul></li>
-					<%
-						}
-					%>
-				</ul>
-			</li>
-		</ul>
-	</div>
+	<%@ include file="header.jsp"%>
 
 	<!--- CONTENT AREA -->
 
@@ -203,7 +72,7 @@
 					<div class="form-row">
 						<label class="form-label">*Type of User</label>
 						<div class="form-item">
-							<select name="usertype">
+							<select name="usertype" id = "usertype">
 								<option value='Administrator'>Administrator</option>
 								<option value='Coach'>Coach</option>
 								<option value='Athlete'>Athlete</option>
@@ -213,12 +82,12 @@
 					<div class="form-row">
 						<p class="form-label">*Username</p>
 						<div class="form-item">
-							<input type="text" name="username" required />
+						    <input id="username" type="text" name="username" onkeyup="checkUsername(); return false;"required />
 						</div>
 					</div>
 					<div class="form-row">
 						<p class="form-label"></p>
-						<div class="form-item">
+						<div class="form-item" id="confirmUsernameFormat">
 							<%
 								if (request.getAttribute("usrname_message") != null) {
 							%>
@@ -325,12 +194,19 @@
 					</div>
 
 					<div class="form-row" style="text-align: right;">
-						<input type="submit" class="button green" value="submit">
+					    <input type="button" class="button green" onclick='formSubmit()' value="submit">
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
+	
+	<div id="dialog_name" title="Comfirmation">
+		<div>
+			<p>Some of your information format not matched, please resubmit</p >
+		</div>
+	</div>
+	
 	<div class="footer">
 		<p>© Peak Centre. All rights reserved.</p>
 	</div>
@@ -391,6 +267,17 @@
 			});
 
 			$("#colorpicker").ColorPicker();
+			
+			$("#dialog_name").dialog({
+				autoOpen : false,
+				resizable : false,
+				modal : true,
+				buttons: {
+	                Ok: function() {
+	                    $( this ).dialog( "close" );
+	                }
+	            }
+			});
 
 			function readURL(input) {
 				if (input.files && input.files[0]) {
@@ -439,6 +326,69 @@
 				message.innerHTML = "Passwords Do Not Match!";
 			}
 		}
+		
+		function formSubmit() {	
+			
+			var post = {
+					username : $("#createuser_form").find("input[name=username]").val(),
+					usertype : $("#createuser_form").find("input[name=usertype]").val(),
+			};
+			
+			$.post('AjaxCheckUsernameRepeat',post, function(data){
+				
+				console.log("data");
+				console.log(data);
+				
+				if(!data && isUsernameLegal) {
+					console.log("here in true")
+					document.getElementById('createuser_form').submit();
+					//return true;
+				} else {
+					
+				    if(data){
+				    	var badColor = "#ff6666";
+				    	var message = document.getElementById('confirmUsernameFormat');
+				    	message.style.fontSize = "11px";
+						message.style.color = badColor;
+						message.innerHTML = "The user name already exist, please use another one";
+				    }
+					console.log("here in false");
+					$("#dialog_name").dialog("open");
+					//return false;
+				}
+				
+				
+			});
+		}
+		
+		function checkUsername() { 
+			isUsernameLegal = false;
+			var email = document.getElementById("username").value;   
+			var message = document.getElementById('confirmUsernameFormat');
+			//Set the colors we will be using ...
+			var goodColor = "#66cc66";
+			var badColor = "#ff6666";
+			//Compare the values in the password field 
+			//and the confirmation field
+			if(!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(email)) {
+				//The passwords match. 
+				//Set the color to the good color and inform
+				//the user that they have entered the correct password 
+				//email.style.backgroundColor = goodColor;
+				message.style.fontSize = "11px";
+				message.style.color = badColor;
+				message.innerHTML = "Format Do not Match!";
+			} else {
+				//The passwords do not match.
+				//Set the color to the bad color and
+				//notify the user.
+				//email.style.backgroundColor = badColor;
+				message.style.fontSize = "11px";
+				message.style.color = goodColor;
+				message.innerHTML = "Format Match!";
+				isUsernameLegal = true;
+			}
+	    } 
 	</script>
 </body>
 </html>
